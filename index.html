@@ -207,6 +207,13 @@
     .fab-lbl.red { color: #dc2626; }
     .admin-badge { position: fixed; top: 58px; left: 50%; transform: translateX(-50%); background: rgba(0,102,204,0.9); color: #fff; font-size: 12px; font-weight: 500; padding: 6px 16px; border-radius: 9999px; z-index: 300; display: none; letter-spacing: 0.04em; white-space: nowrap; }
     .admin-active .admin-badge { display: block; }
+    .admin-active [data-ce-key] { outline: 2px dashed rgba(0,102,204,0.3); border-radius: 4px; cursor: text; }
+    .admin-active [data-ce-key]:hover { outline: 2px solid rgba(0,102,204,0.5); }
+    .admin-active [data-ce-key]:focus { outline: 2px solid var(--blue); background: rgba(0,102,204,0.03); }
+    #portrait-img { width: 100%; height: 100%; object-fit: cover; display: none; border-radius: 18px; }
+    .portrait-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; border-radius: 18px; cursor: pointer; }
+    .admin-active .portrait-edit-overlay { display: flex; }
+    .portrait-edit-btn { background: #fff; color: var(--ink); border: none; border-radius: 9999px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font); pointer-events: none; }
 
     /* ── MODALS ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
@@ -320,10 +327,10 @@
 
   <!-- HERO -->
   <section class="hero" id="hero">
-    <p class="hero-eyebrow">Digital Product Designer · Milano</p>
-    <h1 class="hero-name">Marta Zuliani</h1>
-    <p class="hero-role">Design &amp; strategy at the intersection</p>
-    <p class="hero-manifesto">Every innovation that leaves a mark stems from the ability to put people — not consumers, not users — at the centre of every decision, listening to their stated needs while sensing those still unspoken.</p>
+    <p class="hero-eyebrow" data-ce-key="hero-eyebrow">Digital Product Designer · Milano</p>
+    <h1 class="hero-name" data-ce-key="hero-name">Marta Zuliani</h1>
+    <p class="hero-role" data-ce-key="hero-role">Design &amp; strategy at the intersection</p>
+    <p class="hero-manifesto" data-ce-key="hero-manifesto">Every innovation that leaves a mark stems from the ability to put people — not consumers, not users — at the centre of every decision, listening to their stated needs while sensing those still unspoken.</p>
     <button class="hero-cta" onclick="scrollToSection('work')">View work ↓</button>
     <div class="scroll-hint"><div class="scroll-line"></div><span>Scroll</span></div>
   </section>
@@ -331,15 +338,22 @@
   <!-- ABOUT -->
   <section class="about" id="about">
     <div class="about-inner">
-      <div class="about-photo"><div class="photo-placeholder"><span class="photo-label">portrait photo</span></div></div>
+      <div class="about-photo" style="position:relative;">
+        <img id="portrait-img" alt="Marta Zuliani" />
+        <div class="photo-placeholder" id="photo-placeholder"><span class="photo-label">portrait photo</span></div>
+        <div class="portrait-edit-overlay" onclick="document.getElementById('portrait-input').click()">
+          <button class="portrait-edit-btn">Carica foto</button>
+        </div>
+        <input type="file" id="portrait-input" accept="image/*" style="display:none" onchange="handlePortraitFile(this.files[0])" />
+      </div>
       <div class="about-text">
         <p class="section-label">About</p>
-        <h2 class="about-heading">Business strategy<br>meets product design</h2>
-        <p class="about-bio">Digital product designer and business strategist with over 7 years of experience designing digital solutions for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.<br><br>I work at the intersection of business strategy and product design — leading end-to-end initiatives from vision definition to MVP validation. I coordinate multidisciplinary teams, translate commercial objectives into functional requirements, and shape design decisions on the basis of market evidence and user research.<br><br>Over the past few years I have integrated AI-assisted design and rapid prototyping into consulting workflows, significantly reducing the time between ideation and validation.</p>
+        <h2 class="about-heading" data-ce-key="about-heading">Business strategy<br>meets product design</h2>
+        <p class="about-bio" data-ce-key="about-bio">Digital product designer and business strategist with over 7 years of experience designing digital solutions for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.<br><br>I work at the intersection of business strategy and product design — leading end-to-end initiatives from vision definition to MVP validation. I coordinate multidisciplinary teams, translate commercial objectives into functional requirements, and shape design decisions on the basis of market evidence and user research.<br><br>Over the past few years I have integrated AI-assisted design and rapid prototyping into consulting workflows, significantly reducing the time between ideation and validation.</p>
         <div class="about-meta">
-          <div class="meta-item"><span class="meta-lbl">Location</span><span class="meta-val">Milano, Italy</span></div>
-          <div class="meta-item"><span class="meta-lbl">Languages</span><span class="meta-val">Italian, English</span></div>
-          <div class="meta-item"><span class="meta-lbl">Availability</span><span class="meta-val">Open to opportunities</span></div>
+          <div class="meta-item"><span class="meta-lbl">Location</span><span class="meta-val" data-ce-key="meta-location">Milano, Italy</span></div>
+          <div class="meta-item"><span class="meta-lbl">Languages</span><span class="meta-val" data-ce-key="meta-languages">Italian, English</span></div>
+          <div class="meta-item"><span class="meta-lbl">Availability</span><span class="meta-val" data-ce-key="meta-availability">Open to opportunities</span></div>
         </div>
       </div>
     </div>
@@ -349,21 +363,21 @@
   <section class="cv" id="cv">
     <div class="cv-inner">
       <p class="section-label-dark">Experience</p>
-      <h2 class="cv-heading">Background</h2>
+      <h2 class="cv-heading" data-ce-key="cv-heading">Background</h2>
       <div class="cv-cols">
         <div class="timeline">
-          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2019 — Present</p><p class="tl-role">Customer Experience Strategist</p><p class="tl-company">PwC Experience Consulting</p><p class="tl-desc">Leading service design, business design, and digital product development for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.</p></div></div>
-          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2024 — Present</p><p class="tl-role">Founding Designer</p><p class="tl-company">Ravelight – Veyron mobile app</p><p class="tl-desc">Sole designer on Veyron, a professional event lighting control app. Defined brand identity from scratch and designed the full application design system.</p></div></div>
-          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2025 — Present</p><p class="tl-role">Founder</p><p class="tl-company">Design Studio</p><p class="tl-desc">Design studio focused on tailored products merging art, technology, and innovative design principles.</p></div></div>
-          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2018 — 2019</p><p class="tl-role">Researcher &amp; Service Designer</p><p class="tl-company">Ideatech, Lecco</p><p class="tl-desc">Research on Agile methodologies and effort estimation. Redesigned internal processes to establish a continuous improvement system.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period" data-ce-key="tl-period-0">2019 — Present</p><p class="tl-role" data-ce-key="tl-role-0">Customer Experience Strategist</p><p class="tl-company" data-ce-key="tl-company-0">PwC Experience Consulting</p><p class="tl-desc" data-ce-key="tl-desc-0">Leading service design, business design, and digital product development for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period" data-ce-key="tl-period-1">2024 — Present</p><p class="tl-role" data-ce-key="tl-role-1">Founding Designer</p><p class="tl-company" data-ce-key="tl-company-1">Ravelight – Veyron mobile app</p><p class="tl-desc" data-ce-key="tl-desc-1">Sole designer on Veyron, a professional event lighting control app. Defined brand identity from scratch and designed the full application design system.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period" data-ce-key="tl-period-2">2025 — Present</p><p class="tl-role" data-ce-key="tl-role-2">Founder</p><p class="tl-company" data-ce-key="tl-company-2">Design Studio</p><p class="tl-desc" data-ce-key="tl-desc-2">Design studio focused on tailored products merging art, technology, and innovative design principles.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period" data-ce-key="tl-period-3">2018 — 2019</p><p class="tl-role" data-ce-key="tl-role-3">Researcher &amp; Service Designer</p><p class="tl-company" data-ce-key="tl-company-3">Ideatech, Lecco</p><p class="tl-desc" data-ce-key="tl-desc-3">Research on Agile methodologies and effort estimation. Redesigned internal processes to establish a continuous improvement system.</p></div></div>
         </div>
         <div>
-          <div class="cv-block"><p class="cv-sub-h">Skills</p><div class="skills-grid"><span class="skill-pill">Service Design</span><span class="skill-pill">Strategic Design</span><span class="skill-pill">Business Design</span><span class="skill-pill">Product Discovery</span><span class="skill-pill">User Research</span><span class="skill-pill">Prototyping</span><span class="skill-pill">Workshop Facilitation</span><span class="skill-pill">Brand Identity</span><span class="skill-pill">Business Modelling</span><span class="skill-pill">MVP Design</span><span class="skill-pill">Figma</span><span class="skill-pill">Miro</span><span class="skill-pill">AI-assisted Design</span></div></div>
+          <div class="cv-block"><p class="cv-sub-h">Skills</p><div class="skills-grid" data-ce-key="skills-grid"><span class="skill-pill">Service Design</span><span class="skill-pill">Strategic Design</span><span class="skill-pill">Business Design</span><span class="skill-pill">Product Discovery</span><span class="skill-pill">User Research</span><span class="skill-pill">Prototyping</span><span class="skill-pill">Workshop Facilitation</span><span class="skill-pill">Brand Identity</span><span class="skill-pill">Business Modelling</span><span class="skill-pill">MVP Design</span><span class="skill-pill">Figma</span><span class="skill-pill">Miro</span><span class="skill-pill">AI-assisted Design</span></div></div>
           <div class="cv-block"><p class="cv-sub-h">Education</p>
-            <div class="edu-item"><p class="edu-deg">Double MSc · Product Service System Design + Management Engineering</p><p class="edu-sch">Politecnico di Milano · 2019</p></div>
-            <div class="edu-item"><p class="edu-deg">MITdesignX · Designing High-Impact Solutions</p><p class="edu-sch">Massachusetts Institute of Technology · 2023</p></div>
-            <div class="edu-item"><p class="edu-deg">Advanced Management Education</p><p class="edu-sch">24 Ore Business School · 2024</p></div>
-            <div class="edu-item"><p class="edu-deg">BSc Interior Design</p><p class="edu-sch">Politecnico di Milano · 2015</p></div>
+            <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-0">Double MSc · Product Service System Design + Management Engineering</p><p class="edu-sch" data-ce-key="edu-sch-0">Politecnico di Milano · 2019</p></div>
+            <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-1">MITdesignX · Designing High-Impact Solutions</p><p class="edu-sch" data-ce-key="edu-sch-1">Massachusetts Institute of Technology · 2023</p></div>
+            <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-2">Advanced Management Education</p><p class="edu-sch" data-ce-key="edu-sch-2">24 Ore Business School · 2024</p></div>
+            <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-3">BSc Interior Design</p><p class="edu-sch" data-ce-key="edu-sch-3">Politecnico di Milano · 2015</p></div>
           </div>
         </div>
       </div>
@@ -384,9 +398,9 @@
   <!-- CONTACT -->
   <section class="contact" id="contact">
     <div class="contact-inner">
-      <p class="contact-eyebrow">Get in touch</p>
-      <h2 class="contact-heading">Let's talk</h2>
-      <p class="contact-sub">Open to new projects, freelance collaborations, and full-time roles. I reply within 24 hours.</p>
+      <p class="contact-eyebrow" data-ce-key="contact-eyebrow">Get in touch</p>
+      <h2 class="contact-heading" data-ce-key="contact-heading">Let's talk</h2>
+      <p class="contact-sub" data-ce-key="contact-sub">Open to new projects, freelance collaborations, and full-time roles. I reply within 24 hours.</p>
       <a href="mailto:marta.zuliani93@gmail.com" class="contact-cta">Say hello ↗</a>
       <div class="contact-links">
         <a href="mailto:marta.zuliani93@gmail.com" class="contact-link"><span style="opacity:.6">✉</span> marta.zuliani93@gmail.com</a>
@@ -422,6 +436,7 @@
 <!-- ── ADMIN FAB ── -->
 <div id="admin-fab">
   <div class="fab-row"><span class="fab-lbl blue">Aggiungi progetto</span><button class="fab-btn" onclick="openProjectForm()">+</button></div>
+  <div class="fab-row"><span class="fab-lbl blue" id="save-fab-lbl">Salva modifiche</span><button class="fab-btn" onclick="saveContent()" style="font-size:18px;">💾</button></div>
   <div class="fab-row"><span class="fab-lbl red">Esci da admin</span><button class="fab-btn" style="background:#dc2626;box-shadow:0 4px 20px rgba(220,38,38,.4)" onclick="exitAdmin()">✕</button></div>
 </div>
 
@@ -699,8 +714,53 @@ function checkPwd() {
   if (document.getElementById('pwd-input').value===ADMIN_PWD) { closePwdModal(); activateAdmin(); }
   else { document.getElementById('pwd-err').style.display='block'; }
 }
-function activateAdmin() { adminActive=true; document.body.classList.add('admin-active'); }
-function exitAdmin() { adminActive=false; document.body.classList.remove('admin-active'); }
+function activateAdmin() {
+  adminActive=true;
+  document.body.classList.add('admin-active');
+  document.querySelectorAll('[data-ce-key]').forEach(el => el.contentEditable='true');
+}
+function exitAdmin() {
+  adminActive=false;
+  document.body.classList.remove('admin-active');
+  document.querySelectorAll('[data-ce-key]').forEach(el => { el.contentEditable='false'; el.removeAttribute('contenteditable'); });
+}
+
+const CE_KEY = 'portfolio_content_v1';
+const PORTRAIT_KEY = 'portfolio_portrait_v1';
+
+function loadContent() {
+  const portrait = localStorage.getItem(PORTRAIT_KEY);
+  if (portrait) setPortraitSrc(portrait);
+  const saved = JSON.parse(localStorage.getItem(CE_KEY)||'{}');
+  document.querySelectorAll('[data-ce-key]').forEach(el => {
+    const v = saved[el.dataset.ceKey];
+    if (v !== undefined) el.innerHTML = v;
+  });
+}
+
+function setPortraitSrc(src) {
+  const img = document.getElementById('portrait-img');
+  const ph = document.getElementById('photo-placeholder');
+  img.src = src;
+  img.style.display = 'block';
+  ph.style.display = 'none';
+}
+
+function handlePortraitFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => { localStorage.setItem(PORTRAIT_KEY, e.target.result); setPortraitSrc(e.target.result); };
+  reader.readAsDataURL(file);
+}
+
+function saveContent() {
+  const data = {};
+  document.querySelectorAll('[data-ce-key]').forEach(el => { data[el.dataset.ceKey] = el.innerHTML; });
+  localStorage.setItem(CE_KEY, JSON.stringify(data));
+  const lbl = document.getElementById('save-fab-lbl');
+  lbl.textContent = 'Salvato ✓';
+  setTimeout(() => lbl.textContent = 'Salva modifiche', 2000);
+}
 function deleteProject(id) {
   if (!confirm('Eliminare questo progetto?')) return;
   saveProjects(getProjects().filter(p=>p.id!==id));
@@ -823,6 +883,7 @@ function setTw(k,v){ tw[k]=v; applyTw(); window.parent.postMessage({type:'__edit
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderGrid();
+loadContent();
 </script>
 
 <!-- TWEAKS PANEL -->
