@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mobile Banking Redesign — Marta Zuliani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0066cc; --blue-dark: #0071e3; --blue-light: #2997ff;
+      --ink: #1d1d1f; --ink-80: #333333; --ink-48: #7a7a7a; --muted: #cccccc;
+      --canvas: #ffffff; --parchment: #f5f5f7;
+      --hairline: #e0e0e0; --accent: #6a3a9c;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px; color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 100; background: rgba(255,255,255,0.82); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1080px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-back { font-size: 13px; color: var(--ink-48); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--blue); }
+    .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .nav-cta { font-size: 13px; color: var(--blue); border: 1px solid var(--blue); border-radius: 9999px; padding: 7px 18px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .nav-cta:hover { background: var(--blue); color: #fff; }
+    .project-hero { padding: 120px 32px 80px; }
+    .project-hero-inner { max-width: 1080px; margin: 0 auto; }
+    .breadcrumb { font-size: 13px; color: var(--ink-48); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .project-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .proj-tag { font-size: 12px; font-weight: 500; color: var(--accent); background: rgba(106,58,156,0.08); border-radius: 9999px; padding: 5px 12px; }
+    .project-title { font-size: clamp(36px, 5vw, 64px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
+    .project-subtitle { font-size: clamp(18px, 2.5vw, 24px); font-weight: 300; color: var(--ink-48); line-height: 1.4; max-width: 700px; margin-bottom: 48px; }
+    .project-meta-bar { display: flex; flex-wrap: wrap; gap: 40px; padding: 32px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-bottom: 64px; }
+    .meta-col { display: flex; flex-direction: column; gap: 4px; }
+    .meta-col-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
+    .meta-col-value { font-size: 15px; color: var(--ink); }
+    .cover-full { width: 100%; max-width: 1080px; margin: 0 auto 80px; border-radius: 20px; overflow: hidden; padding: 0 32px; }
+    .cover-full-inner { width: 100%; aspect-ratio: 16/8; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a0a2a 0%, #3a1a5c 50%, #6a3a9c 100%); }
+    .cover-placeholder-text { font-size: 13px; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; }
+    .project-body { max-width: 1080px; margin: 0 auto; padding: 0 32px 100px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 80px; align-items: start; }
+    .full-col { margin-bottom: 80px; }
+    .section-kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+    .body-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
+    /* Research numbers highlight */
+    .research-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 48px 0 80px; }
+    .stat-card { background: var(--parchment); border-radius: 16px; padding: 24px 20px; text-align: center; }
+    .stat-n { font-size: 36px; font-weight: 600; color: var(--accent); letter-spacing: -0.04em; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 13px; color: var(--ink-48); line-height: 1.4; }
+    .gallery-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 80px; }
+    .gallery-img { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+    .gallery-img-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .gallery-img-label { font-size: 11px; font-family: monospace; color: rgba(255,255,255,0.45); letter-spacing: 0.05em; }
+    .outcomes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .outcome-card { background: var(--parchment); border-radius: 16px; padding: 28px 24px; }
+    .outcome-number { font-size: 40px; font-weight: 600; letter-spacing: -0.04em; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+    .outcome-label { font-size: 15px; color: var(--ink-80); line-height: 1.4; }
+    .next-project { background: var(--parchment); border-radius: 20px; padding: 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; text-decoration: none; color: inherit; transition: transform 0.2s; margin-bottom: 40px; }
+    .next-project:hover { transform: translateY(-3px); }
+    .next-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); margin-bottom: 8px; }
+    .next-title { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    .next-arrow { font-size: 32px; color: var(--blue); flex-shrink: 0; }
+    .divider { border: none; border-top: 1px solid var(--hairline); margin-bottom: 80px; }
+    footer { background: var(--parchment); padding: 40px 32px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--ink-48); }
+    @media (max-width: 840px) {
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+      .research-stats { grid-template-columns: 1fr 1fr; }
+      .outcomes-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-3 { grid-template-columns: 1fr 1fr; }
+      .project-body { padding: 0 24px 80px; }
+      .project-hero { padding: 100px 24px 60px; }
+    }
+    @media (max-width: 600px) {
+      .research-stats, .outcomes-grid, .gallery-3 { grid-template-columns: 1fr; }
+      .next-project { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="../portfolio.html" class="nav-back">← Back</a>
+    <a href="../portfolio.html" class="nav-logo">Marta Zuliani</a>
+    <a href="../portfolio.html#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<section class="project-hero">
+  <div class="project-hero-inner">
+    <p class="breadcrumb"><a href="../portfolio.html">Work</a> › Cassa Centrale Banca</p>
+    <div class="project-tag-row">
+      <span class="proj-tag">Financial Services</span>
+      <span class="proj-tag">Service Design</span>
+      <span class="proj-tag">User Research</span>
+      <span class="proj-tag">PwC</span>
+    </div>
+    <h1 class="project-title">Mobile Banking<br>App Redesign</h1>
+    <p class="project-subtitle">Research-led service design for Cassa Centrale Banca — a deep-dive into management perceptions, user behaviour, and competitive landscape that shaped a full mobile banking redesign.</p>
+    <div class="project-meta-bar">
+      <div class="meta-col"><span class="meta-col-label">Client</span><span class="meta-col-value">Cassa Centrale Banca</span></div>
+      <div class="meta-col"><span class="meta-col-label">Role</span><span class="meta-col-value">Service Design Lead — Research Phase</span></div>
+      <div class="meta-col"><span class="meta-col-label">Duration</span><span class="meta-col-value">4 months · 2022</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="cover-full">
+  <div class="cover-full-inner">
+    <span class="cover-placeholder-text">Cassa Centrale Banca — app redesign</span>
+  </div>
+</div>
+
+<div class="project-body">
+  <div class="two-col">
+    <div>
+      <p class="section-kicker">Challenge</p>
+      <h2 class="section-h2">An app that wasn't working — but why?</h2>
+      <p class="body-text">Cassa Centrale Banca's mobile banking app was underperforming: low engagement, below-average store ratings, and a growing gap between the bank's digital ambitions and what customers actually experienced. The challenge: before investing in a redesign, understand precisely why — from both the management perspective and the end-user perspective.</p>
+    </div>
+    <div>
+      <p class="section-kicker">Approach</p>
+      <h2 class="section-h2">Evidence-first, opinion-second</h2>
+      <p class="body-text">I led a rigorous four-month research phase combining qualitative depth with quantitative breadth. Senior management interviews captured strategic intent and internal tensions. In-app feedback and store reviews surfaced the actual pain points users expressed in their own words. Competitive benchmarking situated the product against best-in-class peers and adjacent comparables — framing not just where the app fell short, but what a credible step forward would look like.</p>
+    </div>
+  </div>
+
+  <div class="research-stats">
+    <div class="stat-card"><p class="stat-n">17</p><p class="stat-label">Interviews with top management and pilot banks</p></div>
+    <div class="stat-card"><p class="stat-n">277</p><p class="stat-label">In-app feedback entries analysed</p></div>
+    <div class="stat-card"><p class="stat-n">253</p><p class="stat-label">User reviews coded and synthesised</p></div>
+    <div class="stat-card"><p class="stat-n">4+3</p><p class="stat-label">Competitors benchmarked + comparable services</p></div>
+  </div>
+
+  <div class="full-col">
+    <p class="section-kicker">Solution</p>
+    <h2 class="section-h2">A research foundation that drove real change</h2>
+    <p class="body-text">The output of the research phase was a synthesis framework that mapped user pain points to business priorities, identified quick wins versus structural issues, and gave the design team an evidence-backed brief for the redesign. Key findings: users struggled most with navigation hierarchy and transaction legibility; management had underestimated the importance of the push notification experience; competitor analysis revealed an emerging pattern in personalised financial insights that the app was entirely missing.</p>
+    <p class="body-text" style="margin-top:16px;">The app was redesigned on the basis of these insights. Post-release store ratings improved, validating the research direction.</p>
+  </div>
+
+  <div class="gallery-3">
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#100818,#281040);"><span class="gallery-img-label">research synthesis map</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#180a28,#381858);"><span class="gallery-img-label">competitive landscape</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#1a0a30,#3a1868);"><span class="gallery-img-label">journey pain points</span></div></div>
+  </div>
+
+  <div class="outcomes-grid">
+    <div class="outcome-card"><p class="outcome-number">↑</p><p class="outcome-label">Store ratings improved post-release following research-informed redesign</p></div>
+    <div class="outcome-card"><p class="outcome-number">4mo</p><p class="outcome-label">Comprehensive research phase completed on schedule, enabling timely design handoff</p></div>
+    <div class="outcome-card"><p class="outcome-number">547+</p><p class="outcome-label">Data points analysed across interviews, reviews, and in-app feedback</p></div>
+  </div>
+
+  <hr class="divider" />
+
+  <a href="fascicolo-cittadino.html" class="next-project">
+    <div>
+      <p class="next-label">Next project</p>
+      <p class="next-title">Fascicolo del Cittadino — Comune di Milano</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-name">Marta Zuliani</span>
+    <span class="footer-copy">© 2026</span>
+  </div>
+</footer>
+</body>
+</html>

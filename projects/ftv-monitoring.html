@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FTV Monitoring — Marta Zuliani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0066cc;
+      --blue-dark: #0071e3;
+      --blue-light: #2997ff;
+      --ink: #1d1d1f;
+      --ink-80: #333333;
+      --ink-48: #7a7a7a;
+      --muted: #cccccc;
+      --canvas: #ffffff;
+      --parchment: #f5f5f7;
+      --tile-1: #272729;
+      --tile-2: #0d1a0d;
+      --hairline: #e0e0e0;
+      --accent: #1a8f4a;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px; color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 100; background: rgba(255,255,255,0.82); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1080px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-back { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-48); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--blue); }
+    .nav-logo { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; color: var(--ink); text-decoration: none; }
+    .nav-cta { font-size: 13px; color: var(--blue); border: 1px solid var(--blue); border-radius: 9999px; padding: 7px 18px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .nav-cta:hover { background: var(--blue); color: #fff; }
+
+    /* HERO */
+    .project-hero { padding: 120px 32px 80px; background: var(--canvas); }
+    .project-hero-inner { max-width: 1080px; margin: 0 auto; }
+    .breadcrumb { font-size: 13px; color: var(--ink-48); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .project-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .proj-tag { font-size: 12px; font-weight: 500; color: var(--accent); background: rgba(26,143,74,0.08); border-radius: 9999px; padding: 5px 12px; }
+    .project-title { font-size: clamp(36px, 5vw, 64px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
+    .project-subtitle { font-size: clamp(18px, 2.5vw, 24px); font-weight: 300; color: var(--ink-48); line-height: 1.4; max-width: 700px; margin-bottom: 48px; }
+    .project-meta-bar { display: flex; flex-wrap: wrap; gap: 40px; padding: 32px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-bottom: 64px; }
+    .meta-col { display: flex; flex-direction: column; gap: 4px; }
+    .meta-col-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
+    .meta-col-value { font-size: 15px; color: var(--ink); }
+
+    /* COVER */
+    .cover-full { width: 100%; max-width: 1080px; margin: 0 auto 80px; border-radius: 20px; overflow: hidden; }
+    .cover-full-inner { width: 100%; aspect-ratio: 16/8; background: linear-gradient(135deg, #0a2a14 0%, #0d5c2a 45%, #1a8f4a 100%); display: flex; align-items: center; justify-content: center; }
+    .cover-placeholder-text { font-size: 13px; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; }
+
+    /* BODY */
+    .project-body { max-width: 1080px; margin: 0 auto; padding: 0 32px 100px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 80px; align-items: start; }
+    .full-col { margin-bottom: 80px; }
+    .section-kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+    .body-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
+    .body-text + .body-text { margin-top: 16px; }
+
+    /* GALLERY */
+    .gallery-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 80px; }
+    .gallery-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 80px; }
+    .gallery-img { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+    .gallery-img-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .gallery-img-label { font-size: 11px; font-family: monospace; color: rgba(255,255,255,0.45); letter-spacing: 0.05em; }
+
+    /* OUTCOMES */
+    .outcomes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .outcome-card { background: var(--parchment); border-radius: 16px; padding: 28px 24px; }
+    .outcome-number { font-size: 40px; font-weight: 600; letter-spacing: -0.04em; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+    .outcome-label { font-size: 15px; color: var(--ink-80); line-height: 1.4; }
+
+    /* NEXT */
+    .next-project { background: var(--parchment); border-radius: 20px; padding: 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; text-decoration: none; color: inherit; transition: transform 0.2s; margin-bottom: 40px; }
+    .next-project:hover { transform: translateY(-3px); }
+    .next-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); margin-bottom: 8px; }
+    .next-title { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    .next-arrow { font-size: 32px; color: var(--blue); flex-shrink: 0; }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--hairline); margin-bottom: 80px; }
+
+    /* FOOTER */
+    footer { background: var(--parchment); padding: 40px 32px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--ink-48); }
+
+    @media (max-width: 840px) {
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+      .outcomes-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-3 { grid-template-columns: 1fr 1fr; }
+      .project-body { padding: 0 24px 80px; }
+      .project-hero { padding: 100px 24px 60px; }
+    }
+    @media (max-width: 600px) {
+      .outcomes-grid { grid-template-columns: 1fr; }
+      .gallery-2, .gallery-3 { grid-template-columns: 1fr; }
+      .next-project { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../portfolio.html" class="nav-back">← Back</a>
+    <a href="../portfolio.html" class="nav-logo">Marta Zuliani</a>
+    <a href="../portfolio.html#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<section class="project-hero">
+  <div class="project-hero-inner">
+    <p class="breadcrumb"><a href="../portfolio.html">Work</a> › FTV Monitoring</p>
+    <div class="project-tag-row">
+      <span class="proj-tag">Energy</span>
+      <span class="proj-tag">Product Design</span>
+      <span class="proj-tag">B2B Platform</span>
+      <span class="proj-tag">PwC for A2A</span>
+    </div>
+    <h1 class="project-title">FTV Monitoring —<br>Photovoltaic Plant Intelligence</h1>
+    <p class="project-subtitle">A web and mobile platform for real-time monitoring of photovoltaic plants, designed for both A2A's internal operations and external commercialisation.</p>
+    <div class="project-meta-bar">
+      <div class="meta-col"><span class="meta-col-label">Client</span><span class="meta-col-value">A2A Digital Hub</span></div>
+      <div class="meta-col"><span class="meta-col-label">Role</span><span class="meta-col-value">Lead Product Designer</span></div>
+      <div class="meta-col"><span class="meta-col-label">Period</span><span class="meta-col-value">2023 — Present</span></div>
+      <div class="meta-col"><span class="meta-col-label">Team</span><span class="meta-col-value">1 designer, 4 developers, external data &amp; hardware partners</span></div>
+      <div class="meta-col"><span class="meta-col-label">Status</span><span class="meta-col-value">Pilot live — first connected plant</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="cover-full" style="padding: 0 32px;">
+  <div class="cover-full-inner">
+    <span class="cover-placeholder-text">FTV Monitoring — platform cover image</span>
+  </div>
+</div>
+
+<div class="project-body">
+
+  <div class="two-col">
+    <div>
+      <p class="section-kicker">Challenge</p>
+      <h2 class="section-h2">Making the invisible visible</h2>
+      <p class="body-text">A2A manages a growing portfolio of photovoltaic plants across Italy, but monitoring them relied on fragmented tools and manual reporting. Field operators lacked real-time visibility; management had no single source of truth. The challenge: design a platform that could serve both an operational audience (technicians in the field) and a strategic one (management monitoring commercial performance), while also being robust enough to sell to external plant operators as a standalone product.</p>
+    </div>
+    <div>
+      <p class="section-kicker">Approach</p>
+      <h2 class="section-h2">Dual-track research, single platform</h2>
+      <p class="body-text">I ran parallel discovery tracks — shadowing field operators during plant inspections and conducting structured interviews with management. This revealed two fundamentally different mental models of "monitoring": for operators, it meant real-time alerts and fault tracking; for executives, it meant trend lines and ROI. The design challenge was unifying these without compromising either experience. I facilitated co-design workshops with both groups to validate assumptions before any screen was drawn.</p>
+    </div>
+  </div>
+
+  <div class="gallery-2">
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#0a3a1a,#1a6a3a);"><span class="gallery-img-label">operator dashboard — mobile</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#0d2a0a,#2a5a1a);"><span class="gallery-img-label">plant overview — desktop</span></div></div>
+  </div>
+
+  <div class="full-col">
+    <p class="section-kicker">Solution</p>
+    <h2 class="section-h2">One platform, two entry points</h2>
+    <p class="body-text">FTV Monitoring is structured around a role-aware dashboard that adapts its primary view based on the user's context. Operators land on a live plant map with real-time fault indicators and a prioritised action queue. Managers land on an aggregated performance view with production trend lines, energy yield, and commercial KPIs. A shared alert system keeps both groups informed without noise.</p>
+    <p class="body-text" style="margin-top:16px;">I designed a modular widget system that allows plants of different scales and configurations to be onboarded without custom development — a key requirement for external commercialisation. The design system was built in Figma and handed off with a full token library to reduce developer interpretation time.</p>
+  </div>
+
+  <div class="gallery-3">
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#062010,#0f4020);"><span class="gallery-img-label">alert management</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#081808,#183018);"><span class="gallery-img-label">energy yield chart</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#0a2a14,#1a5a2a);"><span class="gallery-img-label">mobile — field view</span></div></div>
+  </div>
+
+  <div class="outcomes-grid">
+    <div class="outcome-card">
+      <p class="outcome-number">1st</p>
+      <p class="outcome-label">Plant connected and live in pilot, with positive operational feedback from field team</p>
+    </div>
+    <div class="outcome-card">
+      <p class="outcome-number">2-in-1</p>
+      <p class="outcome-label">Single platform designed to serve both internal operations and external commercial clients</p>
+    </div>
+    <div class="outcome-card">
+      <p class="outcome-number">↓ Dev</p>
+      <p class="outcome-label">Modular widget system reduces onboarding effort for each new plant configuration</p>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <a href="app-insight.html" class="next-project">
+    <div>
+      <p class="next-label">Next project</p>
+      <p class="next-title">App Insight — Executive KPI Dashboard</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-name">Marta Zuliani</span>
+    <span class="footer-copy">© 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>

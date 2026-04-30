@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fascicolo del Cittadino — Marta Zuliani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0066cc; --blue-dark: #0071e3; --blue-light: #2997ff;
+      --ink: #1d1d1f; --ink-80: #333333; --ink-48: #7a7a7a; --muted: #cccccc;
+      --canvas: #ffffff; --parchment: #f5f5f7;
+      --hairline: #e0e0e0; --accent: #8a6200;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px; color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+    nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; z-index: 100; background: rgba(255,255,255,0.82); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 32px; }
+    .nav-inner { max-width: 1080px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-back { font-size: 13px; color: var(--ink-48); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--blue); }
+    .nav-logo { font-size: 15px; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .nav-cta { font-size: 13px; color: var(--blue); border: 1px solid var(--blue); border-radius: 9999px; padding: 7px 18px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    .nav-cta:hover { background: var(--blue); color: #fff; }
+    .project-hero { padding: 120px 32px 80px; }
+    .project-hero-inner { max-width: 1080px; margin: 0 auto; }
+    .breadcrumb { font-size: 13px; color: var(--ink-48); margin-bottom: 20px; }
+    .breadcrumb a { color: var(--blue); text-decoration: none; }
+    .project-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .proj-tag { font-size: 12px; font-weight: 500; color: var(--accent); background: rgba(138,98,0,0.08); border-radius: 9999px; padding: 5px 12px; }
+    .project-title { font-size: clamp(36px, 5vw, 64px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.05; color: var(--ink); margin-bottom: 20px; }
+    .project-subtitle { font-size: clamp(18px, 2.5vw, 24px); font-weight: 300; color: var(--ink-48); line-height: 1.4; max-width: 700px; margin-bottom: 48px; }
+    .project-meta-bar { display: flex; flex-wrap: wrap; gap: 40px; padding: 32px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-bottom: 64px; }
+    .meta-col { display: flex; flex-direction: column; gap: 4px; }
+    .meta-col-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
+    .meta-col-value { font-size: 15px; color: var(--ink); }
+    .cover-full { width: 100%; max-width: 1080px; margin: 0 auto 80px; border-radius: 20px; overflow: hidden; padding: 0 32px; }
+    .cover-full-inner { width: 100%; aspect-ratio: 16/8; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1200 0%, #4a3400 50%, #8a6200 100%); }
+    .cover-placeholder-text { font-size: 13px; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 0.08em; }
+    .project-body { max-width: 1080px; margin: 0 auto; padding: 0 32px 100px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-bottom: 80px; align-items: start; }
+    .full-col { margin-bottom: 80px; }
+    .section-kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .section-h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); margin-bottom: 20px; }
+    .body-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
+    .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 48px 0 80px; }
+    .process-step { background: var(--parchment); border-radius: 14px; padding: 20px 16px; text-align: center; }
+    .step-num { font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 8px; }
+    .step-label { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.35; }
+    .gallery-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 80px; }
+    .gallery-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 80px; }
+    .gallery-img { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+    .gallery-img-inner { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .gallery-img-label { font-size: 11px; font-family: monospace; color: rgba(255,255,255,0.45); letter-spacing: 0.05em; }
+    .outcomes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .outcome-card { background: var(--parchment); border-radius: 16px; padding: 28px 24px; }
+    .outcome-number { font-size: 40px; font-weight: 600; letter-spacing: -0.04em; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+    .outcome-label { font-size: 15px; color: var(--ink-80); line-height: 1.4; }
+    .back-home { background: var(--parchment); border-radius: 20px; padding: 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; text-decoration: none; color: inherit; transition: transform 0.2s; margin-bottom: 40px; }
+    .back-home:hover { transform: translateY(-3px); }
+    .next-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); margin-bottom: 8px; }
+    .next-title { font-size: 24px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    .next-arrow { font-size: 32px; color: var(--blue); flex-shrink: 0; }
+    .divider { border: none; border-top: 1px solid var(--hairline); margin-bottom: 80px; }
+    footer { background: var(--parchment); padding: 40px 32px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .footer-copy { font-size: 12px; color: var(--ink-48); }
+    @media (max-width: 840px) {
+      .two-col { grid-template-columns: 1fr; gap: 40px; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .outcomes-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-3 { grid-template-columns: 1fr 1fr; }
+      .project-body { padding: 0 24px 80px; }
+      .project-hero { padding: 100px 24px 60px; }
+    }
+    @media (max-width: 600px) {
+      .process-steps, .outcomes-grid, .gallery-2, .gallery-3 { grid-template-columns: 1fr; }
+      .back-home { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="../portfolio.html" class="nav-back">← Back</a>
+    <a href="../portfolio.html" class="nav-logo">Marta Zuliani</a>
+    <a href="../portfolio.html#contact" class="nav-cta">Get in touch</a>
+  </div>
+</nav>
+
+<section class="project-hero">
+  <div class="project-hero-inner">
+    <p class="breadcrumb"><a href="../portfolio.html">Work</a> › Comune di Milano</p>
+    <div class="project-tag-row">
+      <span class="proj-tag">Public Administration</span>
+      <span class="proj-tag">Service Design</span>
+      <span class="proj-tag">Co-design</span>
+      <span class="proj-tag">PwC</span>
+    </div>
+    <h1 class="project-title">Fascicolo del Cittadino —<br>Comune di Milano</h1>
+    <p class="project-subtitle">End-to-end service design of a citizen-facing application for the Municipality of Milan — from research and co-design workshops with real citizens to design system, prototype, and usability testing.</p>
+    <div class="project-meta-bar">
+      <div class="meta-col"><span class="meta-col-label">Client</span><span class="meta-col-value">Comune di Milano</span></div>
+      <div class="meta-col"><span class="meta-col-label">Role</span><span class="meta-col-value">Service Designer · End-to-end</span></div>
+      <div class="meta-col"><span class="meta-col-label">Duration</span><span class="meta-col-value">6 months · 2021</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="cover-full">
+  <div class="cover-full-inner">
+    <span class="cover-placeholder-text">Fascicolo del Cittadino — app concept</span>
+  </div>
+</div>
+
+<div class="project-body">
+  <div class="two-col">
+    <div>
+      <p class="section-kicker">Challenge</p>
+      <h2 class="section-h2">Public services, human scale</h2>
+      <p class="body-text">Milan's citizens interact with dozens of municipal services — permits, health records, tax declarations, school enrolments — through fragmented channels with inconsistent digital experiences. The Fascicolo del Cittadino was conceived as a single, unified app: a citizen's personal file that aggregates their relationship with the city. The challenge: design something genuinely usable by the full spectrum of Milan's population, from digital natives to elderly residents with low tech confidence.</p>
+    </div>
+    <div>
+      <p class="section-kicker">Approach</p>
+      <h2 class="section-h2">Citizens as co-designers</h2>
+      <p class="body-text">The project followed a full human-centred design process over six months. I led the research and benchmarking phase, then designed and facilitated co-design workshops with citizen panels — deliberately including participants from underrepresented groups. This early involvement meant that by the time screens were being built, the core navigation logic and key service flows had already been tested with real users — dramatically reducing late-stage rework.</p>
+    </div>
+  </div>
+
+  <div class="process-steps">
+    <div class="process-step"><p class="step-num">01</p><p class="step-label">Research &amp; Benchmarking</p></div>
+    <div class="process-step"><p class="step-num">02</p><p class="step-label">Co-design Workshops with Citizens</p></div>
+    <div class="process-step"><p class="step-num">03</p><p class="step-label">Design System</p></div>
+    <div class="process-step"><p class="step-num">04</p><p class="step-label">UX Prototype</p></div>
+    <div class="process-step"><p class="step-num">05</p><p class="step-label">Usability Testing</p></div>
+  </div>
+
+  <div class="full-col">
+    <p class="section-kicker">Solution</p>
+    <h2 class="section-h2">One app, every citizen</h2>
+    <p class="body-text">The Fascicolo del Cittadino is organised around life events rather than administrative categories — moving home, having a child, paying fines — reflecting how citizens actually think about their relationship with the municipality, not how the back-office is structured. A persistent personal profile surfaces the citizen's active requests, upcoming deadlines, and documents in one place.</p>
+    <p class="body-text" style="margin-top:16px;">The design system I built prioritised accessibility: WCAG AA contrast compliance throughout, large touch targets, plain-language microcopy, and a consistent pattern library that the development team could implement reliably. Usability testing with five participant profiles validated the core flows before final handoff.</p>
+  </div>
+
+  <div class="gallery-3">
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#1a1000,#3a2800);"><span class="gallery-img-label">co-design workshop</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#100c00,#302000);"><span class="gallery-img-label">life events navigation</span></div></div>
+    <div class="gallery-img"><div class="gallery-img-inner" style="background: linear-gradient(135deg,#1a1400,#3a2c00);"><span class="gallery-img-label">personal profile screen</span></div></div>
+  </div>
+
+  <div class="outcomes-grid">
+    <div class="outcome-card"><p class="outcome-number">6mo</p><p class="outcome-label">Full end-to-end cycle from research to tested prototype delivered on time</p></div>
+    <div class="outcome-card"><p class="outcome-number">100%</p><p class="outcome-label">WCAG AA accessibility compliance across all screens in the design system</p></div>
+    <div class="outcome-card"><p class="outcome-number">5+</p><p class="outcome-label">Citizen profiles validated through usability testing before development handoff</p></div>
+  </div>
+
+  <hr class="divider" />
+
+  <a href="../portfolio.html#work" class="back-home">
+    <div>
+      <p class="next-label">All projects</p>
+      <p class="next-title">Back to portfolio ↗</p>
+    </div>
+    <span class="next-arrow">↑</span>
+  </a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-name">Marta Zuliani</span>
+    <span class="footer-copy">© 2026</span>
+  </div>
+</footer>
+</body>
+</html>

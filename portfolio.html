@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marta Zuliani — Digital Product Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #0066cc; --blue-dark: #0071e3; --blue-light: #2997ff;
+      --ink: #1d1d1f; --ink-80: #333333; --ink-48: #7a7a7a; --muted: #cccccc;
+      --canvas: #ffffff; --parchment: #f5f5f7; --pearl: #fafafc;
+      --tile-1: #272729; --tile-2: #0d1a0d;
+      --hairline: #e0e0e0; --divider: #f0f0f0;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+      --nav-h: 52px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.374px; color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200; background: rgba(255,255,255,0.88); backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; padding: 0 32px; transition: border-color 0.2s; }
+    .nav-inner { max-width: 1080px; width: 100%; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-size: 15px; font-weight: 600; letter-spacing: -0.3px; color: var(--ink); text-decoration: none; cursor: pointer; }
+    .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+    .nav-links a { font-size: 13px; color: var(--ink-80); text-decoration: none; letter-spacing: -0.12px; transition: color 0.15s; cursor: pointer; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-back-btn { display: none; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-48); cursor: pointer; transition: color 0.15s; border: none; background: none; font-family: var(--font); }
+    .nav-back-btn:hover { color: var(--blue); }
+    .nav-cta { font-size: 13px !important; color: var(--blue) !important; border: 1px solid var(--blue); border-radius: 9999px; padding: 7px 18px; transition: background 0.15s, color 0.15s !important; cursor: pointer; }
+    .nav-cta:hover { background: var(--blue); color: #fff !important; }
+    nav.project-view .nav-back-btn { display: flex; }
+    nav.project-view .nav-home-links { display: none; }
+
+    /* ── PAGE VIEWS ── */
+    #view-home { display: block; }
+    #view-project { display: none; }
+    body.show-project #view-home { display: none; }
+    body.show-project #view-project { display: block; }
+
+    /* ── HERO ── */
+    .hero { min-height: 100vh; background: #07080e; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 32px 80px; position: relative; overflow: hidden; }
+    #hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero-eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 24px; }
+    .hero-name { font-size: clamp(56px, 8vw, 88px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.02; color: #ffffff; margin-bottom: 20px; text-shadow: 0 2px 40px rgba(0,0,0,0.3); }
+    .hero-role { font-size: clamp(20px, 3vw, 30px); font-weight: 300; letter-spacing: -0.02em; color: rgba(255,255,255,0.55); margin-bottom: 28px; }
+    .hero-manifesto { font-size: clamp(16px, 2vw, 20px); font-weight: 400; line-height: 1.5; color: rgba(255,255,255,0.68); max-width: 580px; margin: 0 auto 40px; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); color: #fff; font-size: 17px; text-decoration: none; border-radius: 9999px; padding: 13px 28px; transition: transform 0.15s, background 0.15s; border: 1px solid rgba(255,255,255,0.25); cursor: pointer; font-family: var(--font); backdrop-filter: blur(10px); }
+    .hero-cta:hover { background: rgba(255,255,255,0.25); transform: scale(1.03); }
+    .scroll-hint { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.3; animation: bob 2s ease-in-out infinite; }
+    @keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+    .scroll-hint span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; }
+    .scroll-line { width: 1px; height: 40px; background: rgba(255,255,255,0.5); }
+
+    /* ── ABOUT ── */
+    .about { background: var(--parchment); padding: 100px 32px; }
+    .about-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 72px; align-items: center; }
+    .about-photo { aspect-ratio: 4/5; border-radius: 18px; overflow: hidden; }
+    .photo-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg,#e8e4f0 0%,#d4e4f0 40%,#e0f0e8 100%); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; }
+    .photo-label { font-size: 11px; font-family: monospace; color: rgba(0,0,0,0.3); letter-spacing: 0.05em; }
+    .section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; }
+    .about-heading { font-size: clamp(26px, 3.5vw, 40px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); margin-bottom: 24px; }
+    .about-bio { font-size: 17px; line-height: 1.65; color: var(--ink-80); margin-bottom: 36px; }
+    .about-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .meta-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
+    .meta-val { font-size: 15px; color: var(--ink); }
+
+    /* ── CV ── */
+    .cv { background: var(--tile-1); color: #fff; padding: 100px 32px; }
+    .cv-inner { max-width: 1080px; margin: 0 auto; }
+    .section-label-dark { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 16px; }
+    .cv-heading { font-size: clamp(26px, 3.5vw, 40px); font-weight: 600; letter-spacing: -0.03em; color: #fff; margin-bottom: 64px; }
+    .cv-cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: start; }
+    .timeline { display: flex; flex-direction: column; }
+    .tl-item { display: grid; grid-template-columns: 28px 1fr; gap: 20px; padding-bottom: 36px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-spine { display: flex; flex-direction: column; align-items: center; padding-top: 5px; }
+    .tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue-light); flex-shrink: 0; }
+    .tl-line { width: 1px; flex: 1; background: rgba(255,255,255,0.12); margin-top: 6px; }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-period { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .tl-role { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; margin-bottom: 2px; }
+    .tl-company { font-size: 15px; color: var(--blue-light); margin-bottom: 8px; }
+    .tl-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
+    .cv-sub-h { font-size: 14px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 20px; }
+    .cv-block { margin-bottom: 48px; }
+    .cv-block:last-child { margin-bottom: 0; }
+    .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-pill { font-size: 13px; color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 9999px; padding: 6px 14px; }
+    .edu-item { margin-bottom: 20px; }
+    .edu-item:last-child { margin-bottom: 0; }
+    .edu-deg { font-size: 15px; font-weight: 600; color: #fff; }
+    .edu-sch { font-size: 14px; color: var(--muted); }
+
+    /* ── WORK ── */
+    .work { background: var(--canvas); padding: 100px 32px; }
+    .work-inner { max-width: 1080px; margin: 0 auto; }
+    .work-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 48px; flex-wrap: wrap; gap: 16px; }
+    .work-heading { font-size: clamp(26px, 3.5vw, 40px); font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    .work-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+    .proj-card { border-radius: 18px; overflow: hidden; background: var(--parchment); cursor: pointer; transition: transform 0.22s cubic-bezier(.25,.46,.45,.94); display: flex; flex-direction: column; position: relative; }
+    .proj-card:hover { transform: translateY(-4px); }
+    .proj-card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+    .card-cover { aspect-ratio: 16/10; overflow: hidden; }
+    .proj-card.featured .card-cover { aspect-ratio: auto; min-height: 320px; }
+    .cover-bg { width: 100%; height: 100%; display: flex; align-items: flex-end; padding: 20px; }
+    .cover-bg img { width: 100%; height: 100%; object-fit: cover; }
+    .cover-lbl { font-size: 10px; font-family: monospace; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; }
+    .card-body { padding: 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .proj-card.featured .card-body { padding: 40px 36px; justify-content: center; }
+    .card-year { font-size: 12px; color: var(--ink-48); letter-spacing: 0.06em; }
+    .card-title { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; color: var(--ink); line-height: 1.2; }
+    .proj-card.featured .card-title { font-size: 26px; letter-spacing: -0.4px; }
+    .card-sub { font-size: 15px; color: var(--ink-80); line-height: 1.45; }
+    .proj-card.featured .card-sub { font-size: 17px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tag { font-size: 12px; color: var(--ink-48); background: rgba(0,0,0,0.05); border-radius: 9999px; padding: 4px 10px; }
+    .card-arrow { margin-top: 20px; font-size: 14px; color: var(--blue); }
+    .card-admin-btns { position: absolute; top: 10px; right: 10px; display: none; gap: 6px; z-index: 10; }
+    .admin-active .card-admin-btns { display: flex; }
+    .adm-btn { background: rgba(0,0,0,0.65); color: #fff; border: none; border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; font-family: var(--font); transition: background 0.15s; }
+    .adm-btn:hover { background: rgba(0,0,0,0.9); }
+    .adm-btn.del { background: rgba(200,40,40,0.75); }
+    .adm-btn.del:hover { background: rgba(200,40,40,0.95); }
+
+    /* ── CONTACT ── */
+    .contact { background: var(--tile-2); padding: 120px 32px; text-align: center; }
+    .contact-inner { max-width: 640px; margin: 0 auto; }
+    .contact-eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 20px; }
+    .contact-heading { font-size: clamp(36px, 6vw, 72px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.04; color: #fff; margin-bottom: 24px; }
+    .contact-sub { font-size: 18px; font-weight: 300; color: var(--muted); line-height: 1.55; margin-bottom: 48px; }
+    .contact-cta { display: inline-flex; align-items: center; background: var(--blue); color: #fff; font-size: 17px; text-decoration: none; border-radius: 9999px; padding: 14px 32px; margin-bottom: 48px; transition: background 0.15s; }
+    .contact-cta:hover { background: var(--blue-dark); }
+    .contact-links { display: flex; justify-content: center; align-items: center; gap: 28px; flex-wrap: wrap; }
+    .contact-link { font-size: 15px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.15s; }
+    .contact-link:hover { color: var(--blue-light); }
+    .c-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.15); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--parchment); padding: 36px 32px; border-top: 1px solid var(--hairline); }
+    .footer-inner { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-name { font-size: 13px; font-weight: 600; color: var(--ink); cursor: default; user-select: none; }
+    .footer-copy { font-size: 12px; color: var(--ink-48); }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 12px; color: var(--ink-48); text-decoration: none; cursor: pointer; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--blue); }
+
+    /* ── PROJECT DETAIL VIEW ── */
+    #view-project { padding-top: var(--nav-h); }
+    .pd-hero { padding: 64px 32px 48px; }
+    .pd-hero-inner { max-width: 1080px; margin: 0 auto; }
+    .pd-breadcrumb { font-size: 13px; color: var(--ink-48); margin-bottom: 20px; display: flex; align-items: center; gap: 6px; }
+    .pd-breadcrumb span { cursor: pointer; color: var(--blue); }
+    .pd-breadcrumb span:hover { text-decoration: underline; }
+    .pd-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+    .pd-tag { font-size: 12px; font-weight: 500; color: var(--blue); background: rgba(0,102,204,0.07); border-radius: 9999px; padding: 5px 12px; }
+    .pd-title { font-size: clamp(30px, 5vw, 58px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.06; color: var(--ink); margin-bottom: 18px; }
+    .pd-subtitle { font-size: clamp(16px, 2.5vw, 21px); font-weight: 300; color: var(--ink-48); line-height: 1.45; max-width: 700px; margin-bottom: 44px; }
+    .pd-meta-bar { display: flex; flex-wrap: wrap; gap: 36px; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-bottom: 56px; }
+    .pd-meta-col { display: flex; flex-direction: column; gap: 4px; }
+    .pd-meta-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
+    .pd-meta-val { font-size: 15px; color: var(--ink); }
+    .pd-cover-wrap { max-width: 1080px; margin: 0 auto 64px; padding: 0 32px; }
+    .pd-cover { width: 100%; aspect-ratio: 16/8; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .pd-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .pd-cover-label { font-size: 12px; font-family: monospace; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
+    .pd-body { max-width: 1080px; margin: 0 auto; padding: 0 32px 100px; }
+    .pd-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 64px; align-items: start; }
+    .pd-full-col { margin-bottom: 64px; }
+    .pd-kicker { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+    .pd-h2 { font-size: clamp(20px, 3vw, 32px); font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; color: var(--ink); margin-bottom: 16px; }
+    .pd-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
+    .pd-text + .pd-text { margin-top: 14px; }
+    .pd-gallery { margin-bottom: 64px; }
+    .pd-gallery-grid { display: grid; gap: 12px; }
+    .pd-gallery-grid.g1 { grid-template-columns: 1fr; }
+    .pd-gallery-grid.g2 { grid-template-columns: 1fr 1fr; }
+    .pd-gallery-grid.g3 { grid-template-columns: repeat(3,1fr); }
+    .pd-gallery-grid.g4 { grid-template-columns: repeat(2,1fr); }
+    .pd-gallery-item { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
+    .pd-gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pd-outcomes { display: grid; gap: 18px; margin-bottom: 64px; }
+    .pd-outcomes.o1 { grid-template-columns: 1fr; max-width: 300px; }
+    .pd-outcomes.o2 { grid-template-columns: 1fr 1fr; }
+    .pd-outcomes.o3 { grid-template-columns: repeat(3,1fr); }
+    .pd-outcome-card { background: var(--parchment); border-radius: 16px; padding: 26px 22px; }
+    .pd-outcome-n { font-size: 38px; font-weight: 600; letter-spacing: -0.04em; color: var(--blue); line-height: 1; margin-bottom: 8px; }
+    .pd-outcome-l { font-size: 15px; color: var(--ink-80); line-height: 1.4; }
+    .pd-nav-card { background: var(--parchment); border-radius: 18px; padding: 36px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; transition: transform 0.2s; margin-bottom: 40px; }
+    .pd-nav-card:hover { transform: translateY(-3px); }
+    .pd-nav-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); margin-bottom: 8px; }
+    .pd-nav-title { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
+    .pd-nav-arrow { font-size: 28px; color: var(--blue); flex-shrink: 0; }
+    .pd-divider { border: none; border-top: 1px solid var(--hairline); margin-bottom: 64px; }
+
+    /* ── ADMIN FAB ── */
+    #admin-fab { position: fixed; bottom: 32px; right: 32px; z-index: 500; display: none; flex-direction: column; align-items: flex-end; gap: 10px; }
+    .admin-active #admin-fab { display: flex; }
+    .fab-btn { width: 52px; height: 52px; border-radius: 50%; background: var(--blue); color: #fff; border: none; font-size: 22px; cursor: pointer; box-shadow: 0 4px 20px rgba(0,102,204,0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.15s, background 0.15s; }
+    .fab-btn:hover { background: var(--blue-dark); transform: scale(1.08); }
+    .fab-row { display: flex; align-items: center; gap: 10px; }
+    .fab-lbl { font-size: 12px; font-weight: 500; background: #fff; border-radius: 9999px; padding: 5px 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.12); pointer-events: none; }
+    .fab-lbl.blue { color: var(--blue); }
+    .fab-lbl.red { color: #dc2626; }
+    .admin-badge { position: fixed; top: 58px; left: 50%; transform: translateX(-50%); background: rgba(0,102,204,0.9); color: #fff; font-size: 12px; font-weight: 500; padding: 6px 16px; border-radius: 9999px; z-index: 300; display: none; letter-spacing: 0.04em; white-space: nowrap; }
+    .admin-active .admin-badge { display: block; }
+
+    /* ── MODALS ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: #fff; border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 24px 80px rgba(0,0,0,0.2); }
+    .modal-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+    .modal-sub { font-size: 15px; color: var(--ink-48); margin-bottom: 28px; }
+    .m-input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--hairline); border-radius: 10px; font-size: 16px; font-family: var(--font); color: var(--ink); outline: none; transition: border-color 0.15s; }
+    .m-input:focus { border-color: var(--blue); }
+    .m-error { font-size: 13px; color: #dc2626; margin-top: 8px; display: none; }
+    .m-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .btn-pri { flex: 1; background: var(--blue); color: #fff; border: none; border-radius: 9999px; padding: 12px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: background 0.15s; }
+    .btn-pri:hover { background: var(--blue-dark); }
+    .btn-sec { flex: 1; background: var(--parchment); color: var(--ink); border: none; border-radius: 9999px; padding: 12px; font-size: 15px; cursor: pointer; font-family: var(--font); }
+
+    /* ── PROJECT FORM ── */
+    #pf-overlay { position: fixed; inset: 0; z-index: 700; background: rgba(0,0,0,0.55); display: none; overflow-y: auto; backdrop-filter: blur(6px); padding: 32px 20px; }
+    #pf-overlay.open { display: block; }
+    .pf-container { background: #fff; border-radius: 24px; width: 100%; max-width: 740px; margin: 0 auto; box-shadow: 0 32px 100px rgba(0,0,0,0.25); }
+    .pf-header { padding: 26px 36px 22px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; border-radius: 24px 24px 0 0; z-index: 1; }
+    .pf-ttl { font-size: 20px; font-weight: 600; color: var(--ink); }
+    .pf-close-btn { background: var(--parchment); border: none; border-radius: 50%; width: 34px; height: 34px; font-size: 16px; cursor: pointer; color: var(--ink-48); display: flex; align-items: center; justify-content: center; }
+    .pf-body { padding: 32px 36px; display: flex; flex-direction: column; gap: 28px; }
+    .pf-sec-ttl { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--divider); }
+    .pf-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .pf-field { display: flex; flex-direction: column; gap: 5px; }
+    .pf-lbl { font-size: 13px; font-weight: 500; color: var(--ink-80); }
+    .pf-in, .pf-ta { width: 100%; padding: 10px 14px; border: 1.5px solid var(--hairline); border-radius: 10px; font-size: 15px; font-family: var(--font); color: var(--ink); outline: none; transition: border-color 0.15s; background: var(--canvas); }
+    .pf-in:focus, .pf-ta:focus { border-color: var(--blue); }
+    .pf-ta { min-height: 110px; resize: vertical; line-height: 1.5; }
+    .pf-ta.tall { min-height: 140px; }
+    .cover-drop { border: 2px dashed var(--hairline); border-radius: 14px; padding: 28px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; overflow: hidden; }
+    .cover-drop:hover { border-color: var(--blue); background: rgba(0,102,204,0.02); }
+    .cover-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .cover-preview-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; display: none; }
+    .up-icon { font-size: 26px; color: var(--ink-48); margin-bottom: 6px; }
+    .up-hint { font-size: 14px; color: var(--ink-48); }
+    .up-hint strong { color: var(--blue); }
+    .grad-presets { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .grad-preset { width: 38px; height: 38px; border-radius: 8px; cursor: pointer; border: 3px solid transparent; transition: border-color 0.15s, transform 0.15s; flex-shrink: 0; }
+    .grad-preset:hover, .grad-preset.active { border-color: var(--blue); transform: scale(1.1); }
+    .gallery-drop { border: 2px dashed var(--hairline); border-radius: 14px; padding: 20px; text-align: center; cursor: pointer; position: relative; }
+    .gallery-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .gallery-thumbs { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 10px; }
+    .gthumb { aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; position: relative; }
+    .gthumb img { width: 100%; height: 100%; object-fit: cover; }
+    .gthumb-del { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+    .outcome-rows { display: flex; flex-direction: column; gap: 10px; }
+    .outcome-row { display: grid; grid-template-columns: 110px 1fr 28px; gap: 8px; align-items: center; }
+    .outcome-add-btn { font-size: 13px; color: var(--blue); background: none; border: none; cursor: pointer; font-family: var(--font); padding: 4px 0; text-align: left; }
+    .outcome-del-btn { background: none; border: none; color: var(--ink-48); cursor: pointer; font-size: 16px; }
+    .outcome-del-btn:hover { color: #dc2626; }
+    .toggle-row { display: flex; align-items: center; gap: 12px; }
+    .toggle-sw { position: relative; width: 44px; height: 26px; flex-shrink: 0; }
+    .toggle-sw input { opacity: 0; width: 0; height: 0; }
+    .toggle-sl { position: absolute; inset: 0; background: var(--hairline); border-radius: 9999px; cursor: pointer; transition: background 0.2s; }
+    .toggle-sl::before { content: ""; position: absolute; width: 20px; height: 20px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    .toggle-sw input:checked + .toggle-sl { background: var(--blue); }
+    .toggle-sw input:checked + .toggle-sl::before { transform: translateX(18px); }
+    .toggle-lbl { font-size: 14px; color: var(--ink-80); }
+    .pf-footer { padding: 22px 36px; border-top: 1px solid var(--hairline); display: flex; gap: 12px; justify-content: flex-end; background: #fff; border-radius: 0 0 24px 24px; }
+    .pf-save-btn { background: var(--blue); color: #fff; border: none; border-radius: 9999px; padding: 12px 30px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: background 0.15s; }
+    .pf-save-btn:hover { background: var(--blue-dark); }
+    .pf-cancel-btn { background: var(--parchment); color: var(--ink); border: none; border-radius: 9999px; padding: 12px 22px; font-size: 15px; cursor: pointer; font-family: var(--font); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 840px) {
+      .about-inner { grid-template-columns: 1fr; gap: 40px; }
+      .cv-cols { grid-template-columns: 1fr; gap: 48px; }
+      .work-grid { grid-template-columns: 1fr; }
+      .proj-card.featured { grid-template-columns: 1fr; }
+      .proj-card.featured .card-cover { min-height: 220px; }
+      .pd-two-col { grid-template-columns: 1fr; gap: 40px; }
+      .pd-outcomes.o3 { grid-template-columns: 1fr 1fr; }
+      .pd-gallery-grid.g3 { grid-template-columns: 1fr 1fr; }
+      .pf-grid2 { grid-template-columns: 1fr; }
+      nav { padding: 0 20px; }
+    }
+    @media (max-width: 600px) {
+      .nav-links li:not(:last-child) { display: none; }
+      .hero, .about, .cv, .work, .contact { padding-left: 20px; padding-right: 20px; }
+      .pd-outcomes.o2, .pd-outcomes.o3 { grid-template-columns: 1fr; }
+      .pd-gallery-grid.g2, .pd-gallery-grid.g3, .pd-gallery-grid.g4 { grid-template-columns: 1fr; }
+      .pd-nav-card { flex-direction: column; align-items: flex-start; padding: 24px; }
+      .gallery-thumbs { grid-template-columns: repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div class="nav-home-links" style="display:flex;align-items:center;">
+      <span class="nav-logo" onclick="goHome()">Marta Zuliani</span>
+    </div>
+    <button class="nav-back-btn" id="nav-back" onclick="goHome()">← Tutti i progetti</button>
+    <ul class="nav-links nav-home-links">
+      <li><a onclick="scrollToSection('about')">About</a></li>
+      <li><a onclick="scrollToSection('work')">Work</a></li>
+      <li><a onclick="scrollToSection('contact')" class="nav-cta">Get in touch</a></li>
+    </ul>
+    <span class="nav-logo" id="nav-name-project" style="display:none;"></span>
+  </div>
+</nav>
+
+<div class="admin-badge">✦ Admin Mode</div>
+
+<!-- ═══════════════ VIEW: HOME ═══════════════ -->
+<div id="view-home">
+
+  <!-- HERO -->
+  <section class="hero" id="hero" style="color: rgb(255, 255, 255)">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <p class="hero-eyebrow">Digital Product Designer · Milano</p>
+    <h1 class="hero-name">Marta Zuliani</h1>
+    <p class="hero-role">Design &amp; strategy at the intersection</p>
+    <p class="hero-manifesto">Every innovation that leaves a mark stems from the ability to put people — not consumers, not users — at the centre of every decision, listening to their stated needs while sensing those still unspoken.</p>
+    <button class="hero-cta" onclick="scrollToSection('work')">View work ↓</button>
+    <div class="scroll-hint"><div class="scroll-line"></div><span>Scroll</span></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-inner">
+      <div class="about-photo"><div class="photo-placeholder"><span class="photo-label">portrait photo</span></div></div>
+      <div class="about-text">
+        <p class="section-label">About</p>
+        <h2 class="about-heading">Business strategy<br>meets product design</h2>
+        <p class="about-bio">Digital product designer and business strategist with over 7 years of experience designing digital solutions for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.<br><br>I work at the intersection of business strategy and product design — leading end-to-end initiatives from vision definition to MVP validation. I coordinate multidisciplinary teams, translate commercial objectives into functional requirements, and shape design decisions on the basis of market evidence and user research.<br><br>Over the past few years I have integrated AI-assisted design and rapid prototyping into consulting workflows, significantly reducing the time between ideation and validation.</p>
+        <div class="about-meta">
+          <div class="meta-item"><span class="meta-lbl">Location</span><span class="meta-val">Milano, Italy</span></div>
+          <div class="meta-item"><span class="meta-lbl">Languages</span><span class="meta-val">Italian, English</span></div>
+          <div class="meta-item"><span class="meta-lbl">Availability</span><span class="meta-val">Open to opportunities</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CV -->
+  <section class="cv" id="cv">
+    <div class="cv-inner">
+      <p class="section-label-dark">Experience</p>
+      <h2 class="cv-heading">Background</h2>
+      <div class="cv-cols">
+        <div class="timeline">
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2019 — Present</p><p class="tl-role">Customer Experience Strategist</p><p class="tl-company">PwC Experience Consulting</p><p class="tl-desc">Leading service design, business design, and digital product development for enterprise clients across Energy, Financial Services, Automotive, and Public Administration.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2024 — Present</p><p class="tl-role">Founding Designer</p><p class="tl-company">Ravelight – Veyron mobile app</p><p class="tl-desc">Sole designer on Veyron, a professional event lighting control app. Defined brand identity from scratch and designed the full application design system.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2025 — Present</p><p class="tl-role">Founder</p><p class="tl-company">Design Studio</p><p class="tl-desc">Design studio focused on tailored products merging art, technology, and innovative design principles.</p></div></div>
+          <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period">2018 — 2019</p><p class="tl-role">Researcher &amp; Service Designer</p><p class="tl-company">Ideatech, Lecco</p><p class="tl-desc">Research on Agile methodologies and effort estimation. Redesigned internal processes to establish a continuous improvement system.</p></div></div>
+        </div>
+        <div>
+          <div class="cv-block"><p class="cv-sub-h">Skills</p><div class="skills-grid"><span class="skill-pill">Service Design</span><span class="skill-pill">Strategic Design</span><span class="skill-pill">Business Design</span><span class="skill-pill">Product Discovery</span><span class="skill-pill">User Research</span><span class="skill-pill">Prototyping</span><span class="skill-pill">Workshop Facilitation</span><span class="skill-pill">Brand Identity</span><span class="skill-pill">Business Modelling</span><span class="skill-pill">MVP Design</span><span class="skill-pill">Figma</span><span class="skill-pill">Miro</span><span class="skill-pill">AI-assisted Design</span></div></div>
+          <div class="cv-block"><p class="cv-sub-h">Education</p>
+            <div class="edu-item"><p class="edu-deg">Double MSc · Product Service System Design + Management Engineering</p><p class="edu-sch">Politecnico di Milano · 2019</p></div>
+            <div class="edu-item"><p class="edu-deg">MITdesignX · Designing High-Impact Solutions</p><p class="edu-sch">Massachusetts Institute of Technology · 2023</p></div>
+            <div class="edu-item"><p class="edu-deg">Advanced Management Education</p><p class="edu-sch">24 Ore Business School · 2024</p></div>
+            <div class="edu-item"><p class="edu-deg">BSc Interior Design</p><p class="edu-sch">Politecnico di Milano · 2015</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work" id="work">
+    <div class="work-inner">
+      <div class="work-header">
+        <div><p class="section-label">Selected Projects</p><h2 class="work-heading">Projects</h2></div>
+        <a onclick="scrollToSection('contact')" style="font-size:15px;color:var(--blue);text-decoration:none;cursor:pointer;">Let's work together →</a>
+      </div>
+      <div class="work-grid" id="work-grid"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <p class="contact-eyebrow">Get in touch</p>
+      <h2 class="contact-heading">Let's talk</h2>
+      <p class="contact-sub">Open to new projects, freelance collaborations, and full-time roles. I reply within 24 hours.</p>
+      <a href="mailto:marta.zuliani93@gmail.com" class="contact-cta">Say hello ↗</a>
+      <div class="contact-links">
+        <a href="mailto:marta.zuliani93@gmail.com" class="contact-link"><span style="opacity:.6">✉</span> marta.zuliani93@gmail.com</a>
+        <div class="c-divider"></div>
+        <a href="tel:+393407588515" class="contact-link"><span style="opacity:.6">◎</span> +39 340 758 8515</a>
+        <div class="c-divider"></div>
+        <span class="contact-link"><span style="opacity:.6">◎</span> Milano, Italy</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name" id="footer-trigger">Marta Zuliani</span>
+      <span class="footer-copy">© 2026 — All rights reserved</span>
+      <div class="footer-links"><a onclick="scrollToSection('about')">About</a><a onclick="scrollToSection('work')">Work</a><a onclick="scrollToSection('contact')">Contact</a></div>
+    </div>
+  </footer>
+
+</div><!-- /view-home -->
+
+<!-- ═══════════════ VIEW: PROJECT DETAIL ═══════════════ -->
+<div id="view-project">
+  <div id="pd-content"></div>
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Marta Zuliani</span>
+      <span class="footer-copy">© 2026</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ── ADMIN FAB ── -->
+<div id="admin-fab">
+  <div class="fab-row"><span class="fab-lbl blue">Aggiungi progetto</span><button class="fab-btn" onclick="openProjectForm()">+</button></div>
+  <div class="fab-row"><span class="fab-lbl red">Esci da admin</span><button class="fab-btn" style="background:#dc2626;box-shadow:0 4px 20px rgba(220,38,38,.4)" onclick="exitAdmin()">✕</button></div>
+</div>
+
+<!-- ── PASSWORD MODAL ── -->
+<div class="modal-overlay" id="pwd-modal">
+  <div class="modal-box">
+    <p class="modal-title">Admin access</p>
+    <p class="modal-sub">Inserisci la password per modificare il portfolio.</p>
+    <input class="m-input" type="password" id="pwd-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPwd()" />
+    <p class="m-error" id="pwd-err">Password non corretta.</p>
+    <div class="m-actions">
+      <button class="btn-sec" onclick="closePwdModal()">Annulla</button>
+      <button class="btn-pri" onclick="checkPwd()">Accedi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROJECT FORM ── -->
+<div id="pf-overlay">
+  <div class="pf-container">
+    <div class="pf-header">
+      <span class="pf-ttl" id="pf-form-title">Nuovo progetto</span>
+      <button class="pf-close-btn" onclick="closeProjectForm()">✕</button>
+    </div>
+    <div class="pf-body">
+      <input type="hidden" id="pf-id" />
+      <div>
+        <p class="pf-sec-ttl">Informazioni base</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="pf-field"><label class="pf-lbl">Titolo *</label><input class="pf-in" id="pf-title" placeholder="Es. FTV Monitoring — Photovoltaic Plant Intelligence" /></div>
+          <div class="pf-field"><label class="pf-lbl">Sottotitolo *</label><input class="pf-in" id="pf-subtitle" placeholder="Breve descrizione del progetto" /></div>
+          <div class="pf-grid2">
+            <div class="pf-field"><label class="pf-lbl">Cliente</label><input class="pf-in" id="pf-client" placeholder="Es. A2A Digital Hub" /></div>
+            <div class="pf-field"><label class="pf-lbl">Anno</label><input class="pf-in" id="pf-year" placeholder="Es. 2025" /></div>
+            <div class="pf-field"><label class="pf-lbl">Ruolo</label><input class="pf-in" id="pf-role" placeholder="Es. Lead Product Designer" /></div>
+            <div class="pf-field"><label class="pf-lbl">Durata</label><input class="pf-in" id="pf-duration" placeholder="Es. 6 mesi" /></div>
+          </div>
+          <div class="pf-field"><label class="pf-lbl">Team</label><input class="pf-in" id="pf-team" placeholder="Es. 1 designer, 4 developer" /></div>
+          <div class="pf-field"><label class="pf-lbl">Tag (separati da virgola)</label><input class="pf-in" id="pf-tags" placeholder="Es. Energy, Product Design, B2B" /></div>
+        </div>
+      </div>
+      <div>
+        <p class="pf-sec-ttl">Cover</p>
+        <div class="cover-drop" id="cover-drop">
+          <input type="file" accept="image/*" onchange="handleCoverFile(this.files[0])" />
+          <img id="cover-preview-img" class="cover-preview-img" alt="" />
+          <div id="cover-ph"><div class="up-icon">⬆</div><p class="up-hint"><strong>Clicca o trascina</strong> un'immagine</p><p class="up-hint" style="font-size:12px;margin-top:4px;">PNG, JPG, WebP</p></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-48);margin-top:10px;">Oppure scegli un gradiente:</p>
+        <div class="grad-presets" id="grad-presets">
+          <div class="grad-preset active" style="background:linear-gradient(135deg,#0a2a14,#1a8f4a)" data-g="linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#0a1a3d,#2a5ab8)" data-g="linear-gradient(135deg,#0a1a3d 0%,#1a3a7a 50%,#2a5ab8 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#1a0a2a,#6a3a9c)" data-g="linear-gradient(135deg,#1a0a2a 0%,#3a1a5c 50%,#6a3a9c 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#1a1200,#8a6200)" data-g="linear-gradient(135deg,#1a1200 0%,#4a3400 50%,#8a6200 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#1a0a0a,#8a2020)" data-g="linear-gradient(135deg,#1a0a0a 0%,#4a1818 50%,#8a2020 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#0a1a1a,#1a6a6a)" data-g="linear-gradient(135deg,#0a1a1a 0%,#185050 50%,#1a6a6a 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#181818,#484848)" data-g="linear-gradient(135deg,#181818 0%,#303030 50%,#484848 100%)"></div>
+          <div class="grad-preset" style="background:linear-gradient(135deg,#0d1a3a,#1a3a8a)" data-g="linear-gradient(135deg,#0d1a3a 0%,#162c6a 50%,#1a3a8a 100%)"></div>
+        </div>
+      </div>
+      <div>
+        <p class="pf-sec-ttl">Storia del progetto</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="pf-field"><label class="pf-lbl">Challenge</label><textarea class="pf-ta tall" id="pf-challenge" placeholder="Qual era il problema da risolvere?"></textarea></div>
+          <div class="pf-field"><label class="pf-lbl">Approccio</label><textarea class="pf-ta tall" id="pf-approach" placeholder="Come hai affrontato il problema?"></textarea></div>
+          <div class="pf-field"><label class="pf-lbl">Soluzione</label><textarea class="pf-ta tall" id="pf-solution" placeholder="Cosa hai progettato?"></textarea></div>
+        </div>
+      </div>
+      <div>
+        <p class="pf-sec-ttl">Risultati (fino a 3)</p>
+        <div class="outcome-rows" id="outcome-rows"></div>
+        <button class="outcome-add-btn" id="outcome-add" onclick="addOutcomeRow()">+ Aggiungi risultato</button>
+      </div>
+      <div>
+        <p class="pf-sec-ttl">Galleria immagini</p>
+        <div class="gallery-drop">
+          <input type="file" accept="image/*" multiple onchange="handleGalleryFiles(this.files)" />
+          <div class="up-icon">⬆</div>
+          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini</p>
+        </div>
+        <div class="gallery-thumbs" id="gallery-thumbs"></div>
+      </div>
+      <div>
+        <p class="pf-sec-ttl">Impostazioni</p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="toggle-row"><label class="toggle-sw"><input type="checkbox" id="pf-featured" /><span class="toggle-sl"></span></label><span class="toggle-lbl">Progetto in evidenza (larghezza doppia)</span></div>
+          <div class="pf-field"><label class="pf-lbl">Link esterno (opzionale)</label><input class="pf-in" id="pf-ext-link" placeholder="https://..." /></div>
+        </div>
+      </div>
+    </div>
+    <div class="pf-footer">
+      <button class="pf-cancel-btn" onclick="closeProjectForm()">Annulla</button>
+      <button class="pf-save-btn" onclick="saveProjectForm()">Salva progetto</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const SK = 'marta_portfolio_v2';
+
+const DEFAULTS = [
+  { id:'ftv-monitoring', featured:true, order:0, year:'2023', title:'FTV Monitoring — Photovoltaic Plant Intelligence', subtitle:'Designed a web and mobile platform for real-time monitoring of photovoltaic plants for A2A, developed for both internal operations and external commercialisation. Led a team of 1 designer and 4 developers.', client:'A2A Digital Hub', role:'Lead Product Designer', duration:'2023 — Present', team:'1 designer, 4 developer, partner data & hardware', tags:['Energy','Product Design','B2B Platform','PwC'], coverImage:null, coverGradient:'linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)', challenge:"A2A manages a growing portfolio of photovoltaic plants across Italy, but monitoring relied on fragmented tools and manual reporting. Field operators lacked real-time visibility; management had no single source of truth.", approach:"I ran parallel discovery tracks — shadowing field operators and conducting structured interviews with management. Co-design workshops with both groups validated assumptions before any screen was drawn.", solution:"FTV Monitoring is structured around a role-aware dashboard. Operators land on a live plant map with real-time fault indicators. Managers get aggregated performance KPIs. A modular widget system allows plants of any scale to be onboarded without custom development.", outcomeStats:[{number:'1st',label:'Plant connected and live in pilot'},{number:'2-in-1',label:'Single platform for internal ops and external clients'},{number:'↓ Dev',label:'Modular widget system reduces onboarding effort'}], gallery:[] },
+  { id:'app-insight', featured:false, order:1, year:'2023', title:'App Insight — Executive KPI Dashboard', subtitle:'Custom B2B application enabling A2A top management to monitor strategic KPIs with self-BI features, social interactions, and audio data playback in podcast format.', client:'A2A Digital Hub', role:'Lead Product Designer', duration:'12 mesi', team:'', tags:['Energy','Product Design','Data Visualisation'], coverImage:null, coverGradient:'linear-gradient(135deg,#0a1a3d 0%,#1a3a7a 50%,#2a5ab8 100%)', challenge:"A2A's top management were drowning in spreadsheets and siloed tools. Strategic KPIs lived in different systems with no shared view of what mattered most.", approach:"I interviewed 12 executives to map actual information-seeking behaviours. Key insight: most strategic check-ins happen in transit — shaping a mobile-first, audio-mode design.", solution:"App Insight unifies three modes: a self-BI dashboard with customisable views, a social layer for inline comments on data, and an audio brief that reads key KPIs aloud as a personal daily podcast.", outcomeStats:[{number:'12mo',label:'Full design-to-delivery cycle owned end-to-end'},{number:'3-in-1',label:'Dashboard, social, and audio unified'},{number:'↑ NPS',label:'Positive feedback during rollout'}], gallery:[] },
+  { id:'cassa-centrale', featured:false, order:2, year:'2022', title:'Mobile Banking App Redesign', subtitle:'Service Design Lead for the research phase — 17 management interviews, 277 in-app feedback entries, 253 user reviews analysed, 4 competitors benchmarked.', client:'Cassa Centrale Banca', role:'Service Design Lead — Research Phase', duration:'4 mesi', team:'', tags:['Financial Services','Service Design','User Research'], coverImage:null, coverGradient:'linear-gradient(135deg,#1a0a2a 0%,#3a1a5c 50%,#6a3a9c 100%)', challenge:"Cassa Centrale Banca's mobile app was underperforming: low engagement, below-average store ratings, and a gap between digital ambitions and customer experience.", approach:"A rigorous four-month research phase combining 17 management interviews, 277 in-app feedback entries, 253 user reviews, and competitive benchmarking of 4 direct competitors and 3 comparables.", solution:"A synthesis framework mapping user pain points to business priorities — giving the design team an evidence-backed brief. App was redesigned; store ratings improved post-release.", outcomeStats:[{number:'↑',label:'Store ratings improved post-release'},{number:'4mo',label:'Research phase delivered on schedule'},{number:'547+',label:'Data points analysed across all sources'}], gallery:[] },
+  { id:'fascicolo-cittadino', featured:false, order:3, year:'2021', title:'Fascicolo del Cittadino — Comune di Milano', subtitle:'End-to-end design of a citizen-facing app for the Municipality of Milan — research, co-design workshops with citizens, design system, UX prototype, and usability testing.', client:'Comune di Milano', role:'Service Designer', duration:'6 mesi', team:'', tags:['Public Administration','Service Design','Co-design'], coverImage:null, coverGradient:'linear-gradient(135deg,#1a1200 0%,#4a3400 50%,#8a6200 100%)', challenge:"Milan's citizens interact with dozens of municipal services through fragmented channels. The challenge: design a single, unified app usable by the full spectrum of the population.", approach:"Full human-centred design process: research, benchmarking, and co-design workshops with citizen panels — deliberately including underrepresented groups.", solution:"The app is organised around life events rather than administrative categories, with a WCAG AA-compliant design system, plain-language microcopy, and a pattern library validated through usability testing.", outcomeStats:[{number:'6mo',label:'Full end-to-end cycle delivered on time'},{number:'100%',label:'WCAG AA compliance across all screens'},{number:'5+',label:'Citizen profiles tested in usability sessions'}], gallery:[] }
+];
+
+function getProjects() {
+  try { const d=localStorage.getItem(SK); if(!d){saveProjects(DEFAULTS);return DEFAULTS;} return JSON.parse(d); }
+  catch(e) { return DEFAULTS; }
+}
+function saveProjects(p) { localStorage.setItem(SK,JSON.stringify(p)); }
+
+// ── ROUTING ───────────────────────────────────────────────────────────────────
+function showProject(id) {
+  const projects = getProjects();
+  const p = projects.find(x=>x.id===id);
+  if (!p) return;
+  renderProjectDetail(p, projects);
+  document.body.classList.add('show-project');
+  document.getElementById('main-nav').classList.add('project-view');
+  document.querySelector('.nav-home-links') && document.querySelectorAll('.nav-home-links').forEach(el=>el.style.display='none');
+  document.getElementById('nav-back').style.display='flex';
+  document.getElementById('nav-name-project').textContent = p.client||p.title;
+  document.getElementById('nav-name-project').style.display='block';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function goHome() {
+  document.body.classList.remove('show-project');
+  document.getElementById('main-nav').classList.remove('project-view');
+  document.querySelectorAll('.nav-home-links').forEach(el=>el.style.display='');
+  document.getElementById('nav-back').style.display='none';
+  document.getElementById('nav-name-project').style.display='none';
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) { const top = el.getBoundingClientRect().top + window.pageYOffset - 60; window.scrollTo({top,behavior:'smooth'}); }
+}
+
+// ── RENDER GRID ───────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderGrid() {
+  const grid = document.getElementById('work-grid');
+  const projects = getProjects().slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  grid.innerHTML = projects.map(p => {
+    const coverContent = p.coverImage
+      ? `<img src="${p.coverImage}" style="width:100%;height:100%;object-fit:cover;" alt="" />`
+      : `<div class="cover-bg" style="background:${p.coverGradient}"><span class="cover-lbl">${esc(p.client||p.title)}</span></div>`;
+    const tags = (p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+    const yearLabel = p.featured ? `${esc(p.year)} — Featured project` : esc(p.year);
+    return `
+    <div class="proj-card${p.featured?' featured':''}" onclick="showProject('${esc(p.id)}')" data-id="${esc(p.id)}">
+      <div class="card-cover">${coverContent}</div>
+      <div class="card-body">
+        <span class="card-year">${yearLabel}</span>
+        <h3 class="card-title">${esc(p.title)}</h3>
+        <p class="card-sub">${esc(p.subtitle)}</p>
+        <div class="card-tags">${tags}</div>
+        ${p.featured?'<span class="card-arrow">View case study →</span>':''}
+      </div>
+      <div class="card-admin-btns">
+        <button class="adm-btn" onclick="event.stopPropagation();openProjectForm('${esc(p.id)}')">Modifica</button>
+        <button class="adm-btn del" onclick="event.stopPropagation();deleteProject('${esc(p.id)}')">Elimina</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // fade-in
+  grid.querySelectorAll('.proj-card').forEach((el,i)=>{
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition=`opacity .5s ease ${i*.08}s, transform .5s ease ${i*.08}s`;
+    setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)';},50);
+  });
+}
+
+// ── RENDER PROJECT DETAIL ─────────────────────────────────────────────────────
+function nl2p(text) {
+  return (text||'').split(/\n\n+/).filter(Boolean).map(p=>`<p class="pd-text">${esc(p).replace(/\n/g,'<br>')}</p>`).join('');
+}
+
+function renderProjectDetail(p, all) {
+  const sorted = all.slice().sort((a,b)=>(a.order||0)-(b.order||0));
+  const idx = sorted.findIndex(x=>x.id===p.id);
+  const next = sorted[idx+1];
+
+  const tags = (p.tags||[]).map(t=>`<span class="pd-tag">${esc(t)}</span>`).join('');
+  const metas = [
+    {l:'Cliente',v:p.client},{l:'Ruolo',v:p.role},
+    {l:'Periodo',v:p.duration||p.year},{l:'Team',v:p.team}
+  ].filter(m=>m.v).map(m=>`<div class="pd-meta-col"><span class="pd-meta-lbl">${esc(m.l)}</span><span class="pd-meta-val">${esc(m.v)}</span></div>`).join('');
+
+  const cover = p.coverImage
+    ? `<div class="pd-cover"><img src="${p.coverImage}" alt="${esc(p.title)}" /></div>`
+    : `<div class="pd-cover" style="background:${p.coverGradient}"><span class="pd-cover-label">${esc(p.client||p.title)}</span></div>`;
+
+  const stories = [
+    {k:'Challenge',kk:'Il problema',t:p.challenge},
+    {k:'Approccio',kk:'Il metodo',t:p.approach},
+    {k:'Soluzione',kk:'Il risultato',t:p.solution}
+  ].filter(s=>s.t);
+
+  let storyHTML = '';
+  if (stories.length>=2) {
+    storyHTML = `<div class="pd-two-col">${stories.slice(0,2).map(s=>`<div><p class="pd-kicker">${s.k}</p><h2 class="pd-h2">${s.kk}</h2>${nl2p(s.t)}</div>`).join('')}</div>`;
+    if (stories[2]) storyHTML += `<div class="pd-full-col"><p class="pd-kicker">${stories[2].k}</p><h2 class="pd-h2">${stories[2].kk}</h2>${nl2p(stories[2].t)}</div>`;
+  } else if (stories.length===1) {
+    storyHTML = `<div class="pd-full-col"><p class="pd-kicker">${stories[0].k}</p><h2 class="pd-h2">${stories[0].kk}</h2>${nl2p(stories[0].t)}</div>`;
+  }
+
+  const imgs = (p.gallery||[]).filter(Boolean);
+  const galleryHTML = imgs.length ? `<div class="pd-gallery"><div class="pd-gallery-grid ${['','g1','g2','g3','g4'][Math.min(imgs.length,4)]||'g4'}">${imgs.map(src=>`<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`).join('')}</div></div>` : '';
+
+  const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
+  const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
+
+  const navCard = next
+    ? `<div class="pd-nav-card" onclick="showProject('${esc(next.id)}')"><div><p class="pd-nav-label">Progetto successivo</p><p class="pd-nav-title">${esc(next.title)}</p></div><span class="pd-nav-arrow">→</span></div>`
+    : `<div class="pd-nav-card" onclick="goHome()"><div><p class="pd-nav-label">Tutti i progetti</p><p class="pd-nav-title">Torna al portfolio ↗</p></div><span class="pd-nav-arrow">↑</span></div>`;
+
+  document.getElementById('pd-content').innerHTML = `
+    <section class="pd-hero">
+      <div class="pd-hero-inner">
+        <p class="pd-breadcrumb"><span onclick="goHome()">Work</span> › ${esc(p.client||p.title)}</p>
+        <div class="pd-tag-row">${tags}</div>
+        <h1 class="pd-title">${esc(p.title)}</h1>
+        <p class="pd-subtitle">${esc(p.subtitle)}</p>
+        <div class="pd-meta-bar">${metas}</div>
+      </div>
+    </section>
+    <div class="pd-cover-wrap">${cover}</div>
+    <div class="pd-body">
+      ${storyHTML}
+      ${galleryHTML}
+      ${outcomesHTML}
+      <hr class="pd-divider" />
+      ${navCard}
+    </div>`;
+
+  // animate
+  setTimeout(()=>{
+    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-gallery-item').forEach((el,i)=>{
+      el.style.opacity='0'; el.style.transform='translateY(16px)';
+      el.style.transition=`opacity .5s ease ${i*.07}s, transform .5s ease ${i*.07}s`;
+    });
+    const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';obs.unobserve(e.target);}});},{threshold:.1});
+    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-gallery-item').forEach(el=>obs.observe(el));
+  },100);
+}
+
+// ── ADMIN ─────────────────────────────────────────────────────────────────────
+const ADMIN_PWD = 'marta2026';
+let adminActive = false;
+let footerClicks = 0, footerTimer = null;
+
+document.getElementById('footer-trigger').addEventListener('click',()=>{
+  footerClicks++;
+  clearTimeout(footerTimer);
+  footerTimer = setTimeout(()=>footerClicks=0, 1000);
+  if (footerClicks>=3) { footerClicks=0; openPwdModal(); }
+});
+
+function openPwdModal() {
+  document.getElementById('pwd-input').value='';
+  document.getElementById('pwd-err').style.display='none';
+  document.getElementById('pwd-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('pwd-input').focus(),100);
+}
+function closePwdModal() { document.getElementById('pwd-modal').classList.remove('open'); }
+function checkPwd() {
+  if (document.getElementById('pwd-input').value===ADMIN_PWD) { closePwdModal(); activateAdmin(); }
+  else { document.getElementById('pwd-err').style.display='block'; }
+}
+function activateAdmin() { adminActive=true; document.body.classList.add('admin-active'); }
+function exitAdmin() { adminActive=false; document.body.classList.remove('admin-active'); }
+function deleteProject(id) {
+  if (!confirm('Eliminare questo progetto?')) return;
+  saveProjects(getProjects().filter(p=>p.id!==id));
+  renderGrid();
+}
+
+// ── FORM ──────────────────────────────────────────────────────────────────────
+let _cover=null, _gradient='linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)', _gallery=[], _outcomeCount=0;
+
+function openProjectForm(id) {
+  _cover=null; _gradient=document.querySelector('.grad-preset.active').dataset.g; _gallery=[]; _outcomeCount=0;
+  document.getElementById('gallery-thumbs').innerHTML='';
+  document.getElementById('outcome-rows').innerHTML='';
+  document.getElementById('cover-preview-img').style.display='none';
+  document.getElementById('cover-ph').style.display='block';
+  document.getElementById('pf-id').value=id||'';
+  document.getElementById('pf-form-title').textContent=id?'Modifica progetto':'Nuovo progetto';
+
+  if (id) {
+    const p=getProjects().find(x=>x.id===id);
+    if (p) {
+      document.getElementById('pf-title').value=p.title||'';
+      document.getElementById('pf-subtitle').value=p.subtitle||'';
+      document.getElementById('pf-client').value=p.client||'';
+      document.getElementById('pf-year').value=p.year||'';
+      document.getElementById('pf-role').value=p.role||'';
+      document.getElementById('pf-duration').value=p.duration||'';
+      document.getElementById('pf-team').value=p.team||'';
+      document.getElementById('pf-tags').value=(p.tags||[]).join(', ');
+      document.getElementById('pf-challenge').value=p.challenge||'';
+      document.getElementById('pf-approach').value=p.approach||'';
+      document.getElementById('pf-solution').value=p.solution||'';
+      document.getElementById('pf-ext-link').value=p.extLink||'';
+      document.getElementById('pf-featured').checked=!!p.featured;
+      if (p.coverImage) { _cover=p.coverImage; document.getElementById('cover-preview-img').src=p.coverImage; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; }
+      else if (p.coverGradient) { _gradient=p.coverGradient; setActiveGrad(p.coverGradient); }
+      _gallery=[...(p.gallery||[])];
+      _gallery.forEach((src,i)=>{ if(src) addGalleryThumb(src,i); });
+      (p.outcomeStats||[]).forEach(s=>addOutcomeRow(s.number,s.label));
+    }
+  } else {
+    ['pf-title','pf-subtitle','pf-client','pf-year','pf-role','pf-duration','pf-team','pf-tags','pf-challenge','pf-approach','pf-solution','pf-ext-link'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pf-featured').checked=false;
+    addOutcomeRow(); addOutcomeRow(); addOutcomeRow();
+  }
+
+  document.getElementById('pf-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeProjectForm() { document.getElementById('pf-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+function saveProjectForm() {
+  const title=document.getElementById('pf-title').value.trim();
+  if (!title) { alert('Il titolo è obbligatorio.'); return; }
+  const editId=document.getElementById('pf-id').value;
+  const projects=getProjects();
+  const newId=editId||'proj-'+Date.now();
+  const stats=[];
+  document.querySelectorAll('.outcome-row').forEach(row=>{
+    const n=row.querySelector('.on-input').value.trim(), l=row.querySelector('.ol-input').value.trim();
+    if(n||l) stats.push({number:n,label:l});
+  });
+  const pd={ id:newId, featured:document.getElementById('pf-featured').checked,
+    order:editId?(projects.find(p=>p.id===editId)||{}).order:projects.length,
+    title, subtitle:document.getElementById('pf-subtitle').value.trim(),
+    client:document.getElementById('pf-client').value.trim(), year:document.getElementById('pf-year').value.trim(),
+    role:document.getElementById('pf-role').value.trim(), duration:document.getElementById('pf-duration').value.trim(),
+    team:document.getElementById('pf-team').value.trim(),
+    tags:document.getElementById('pf-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    challenge:document.getElementById('pf-challenge').value.trim(), approach:document.getElementById('pf-approach').value.trim(),
+    solution:document.getElementById('pf-solution').value.trim(),
+    extLink:document.getElementById('pf-ext-link').value.trim(),
+    outcomeStats:stats, coverImage:_cover, coverGradient:_gradient,
+    gallery:_gallery.filter(Boolean)
+  };
+  saveProjects(editId ? projects.map(p=>p.id===editId?pd:p) : [...projects,pd]);
+  closeProjectForm(); renderGrid();
+}
+
+function handleCoverFile(file) {
+  if (!file) return;
+  const r=new FileReader(); r.onload=e=>{ _cover=e.target.result; document.getElementById('cover-preview-img').src=e.target.result; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; }; r.readAsDataURL(file);
+}
+function setActiveGrad(g) { document.querySelectorAll('.grad-preset').forEach(el=>el.classList.toggle('active',el.dataset.g===g)); }
+document.querySelectorAll('.grad-preset').forEach(el=>el.addEventListener('click',()=>{ document.querySelectorAll('.grad-preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); _gradient=el.dataset.g; _cover=null; document.getElementById('cover-preview-img').style.display='none'; document.getElementById('cover-ph').style.display='block'; }));
+
+function handleGalleryFiles(files) { Array.from(files).forEach(f=>{ const r=new FileReader(); r.onload=e=>{ const idx=_gallery.length; _gallery.push(e.target.result); addGalleryThumb(e.target.result,idx); }; r.readAsDataURL(f); }); }
+function addGalleryThumb(src,idx) { const d=document.createElement('div'); d.className='gthumb'; d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button>`; document.getElementById('gallery-thumbs').appendChild(d); }
+function removeThumb(btn,idx) { _gallery[idx]=null; btn.closest('.gthumb').remove(); }
+
+let _oc=0;
+function addOutcomeRow(n='',l='') {
+  if(_oc>=3) return; _oc++;
+  const row=document.createElement('div'); row.className='outcome-row';
+  row.innerHTML=`<input class="pf-in on-input" placeholder="Es. 38%" value="${esc(n)}" /><input class="pf-in ol-input" placeholder="Descrizione" value="${esc(l)}" /><button class="outcome-del-btn" onclick="removeOutcomeRow(this)">✕</button>`;
+  document.getElementById('outcome-rows').appendChild(row);
+  if(_oc>=3) document.getElementById('outcome-add').style.display='none';
+}
+function removeOutcomeRow(btn) { btn.closest('.outcome-row').remove(); _oc--; document.getElementById('outcome-add').style.display=''; }
+
+// ── SCROLL ANIMATIONS ─────────────────────────────────────────────────────────
+const sObs=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';sObs.unobserve(e.target);}}); },{threshold:.08});
+document.querySelectorAll('.tl-item,.about-text,.about-photo,.cv-block,.contact-inner').forEach(el=>{ el.style.opacity='0'; el.style.transform='translateY(20px)'; el.style.transition='opacity .55s ease, transform .55s ease'; sObs.observe(el); });
+
+window.addEventListener('scroll',()=>{ document.getElementById('main-nav').style.borderBottomColor=window.scrollY>20?'rgba(0,0,0,0.12)':'rgba(0,0,0,0.08)'; },{passive:true});
+
+// ── TWEAKS ────────────────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS=/*EDITMODE-BEGIN*/{
+  "accentColor": "#0066cc",
+  "heroSize": 88,
+  "darkTile": "#0d1a0d"
+}/*EDITMODE-END*/;
+let tw={...TWEAK_DEFAULTS};
+function applyTw(){ document.documentElement.style.setProperty('--blue',tw.accentColor); document.documentElement.style.setProperty('--blue-dark',tw.accentColor); document.documentElement.style.setProperty('--tile-2',tw.darkTile); const hn=document.querySelector('.hero-name'); if(hn) hn.style.fontSize=tw.heroSize+'px'; }
+applyTw();
+window.addEventListener('message',e=>{ if(e.data?.type==='__activate_edit_mode')showTw(true); if(e.data?.type==='__deactivate_edit_mode')showTw(false); });
+window.parent.postMessage({type:'__edit_mode_available'},'*');
+function showTw(s){ document.getElementById('tweaks-panel').style.display=s?'flex':'none'; }
+function setTw(k,v){ tw[k]=v; applyTw(); window.parent.postMessage({type:'__edit_mode_set_keys',edits:{[k]:v}},'*'); }
+
+// ── HERO CANVAS ANIMATION — TALL COLUMNS ──────────────────────────────────────
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, rafId;
+  const mouse = {x:0.5, y:0.5}, sm = {x:0.5, y:0.5};
+  const isMobile = window.matchMedia('(hover: none)').matches;
+
+  // cx: center X (0-1), w: width ratio, h: height ratio (>1 = taller than hero),
+  // base: dark base color, hi: highlight color, ph: phase, spd: bob speed, dep: parallax depth
+  const cols = [
+    { cx:0.03,  w:0.072, h:1.15, base:'#3b0764', hi:'#7c3aed', ph:0.0,  spd:0.17, dep:0.040 },
+    { cx:0.13,  w:0.088, h:1.35, base:'#4c1d95', hi:'#a78bfa', ph:1.4,  spd:0.13, dep:0.055 },
+    { cx:0.24,  w:0.076, h:1.05, base:'#134e4a', hi:'#2dd4bf', ph:2.7,  spd:0.21, dep:0.030 },
+    { cx:0.36,  w:0.105, h:1.45, base:'#1e3a8a', hi:'#93c5fd', ph:0.8,  spd:0.11, dep:0.070 },
+    { cx:0.50,  w:0.082, h:1.20, base:'#064e3b', hi:'#6ee7b7', ph:3.3,  spd:0.16, dep:0.045 },
+    { cx:0.63,  w:0.094, h:1.10, base:'#581c87', hi:'#e879f9', ph:1.9,  spd:0.18, dep:0.038 },
+    { cx:0.75,  w:0.078, h:1.30, base:'#1e1b4b', hi:'#818cf8', ph:4.1,  spd:0.14, dep:0.060 },
+    { cx:0.87,  w:0.090, h:1.08, base:'#0c4a6e', hi:'#38bdf8', ph:2.5,  spd:0.19, dep:0.042 },
+    { cx:0.97,  w:0.070, h:1.40, base:'#3b0764', hi:'#c084fc', ph:0.5,  spd:0.12, dep:0.050 },
+  ];
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = canvas.width  = rect.width;
+    H = canvas.height = rect.height;
+  }
+
+  function hexRGB(hex) {
+    return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+  }
+
+  function drawRoundRect(x, y, w, h, r) {
+    r = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y);
+    ctx.arcTo(x+w, y, x+w, y+r, r);
+    ctx.lineTo(x+w, y+h-r);
+    ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
+    ctx.lineTo(x+r, y+h);
+    ctx.arcTo(x, y+h, x, y+h-r, r);
+    ctx.lineTo(x, y+r);
+    ctx.arcTo(x, y, x+r, y, r);
+    ctx.closePath();
+  }
+
+  function draw(ts) {
+    const T = ts * 0.001;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#07080e';
+    ctx.fillRect(0, 0, W, H);
+
+    if (!isMobile) {
+      sm.x += (mouse.x - sm.x) * 0.038;
+      sm.y += (mouse.y - sm.y) * 0.038;
+    }
+
+    cols.forEach(col => {
+      // Organic bob (compound sine for natural feel)
+      const bobY  = Math.sin(T * col.spd + col.ph) * 0.038
+                  + Math.sin(T * col.spd * 0.43 + col.ph * 2.1) * 0.012;
+      const swayX = Math.cos(T * col.spd * 0.6 + col.ph * 1.5) * 0.006;
+
+      const mox = isMobile ? 0 : (sm.x - 0.5) * col.dep;
+      const moy = isMobile ? 0 : (sm.y - 0.5) * col.dep * 0.4;
+
+      const cxPx = (col.cx + swayX + mox) * W;
+      const cyPx = (0.5    + bobY  + moy) * H;
+      const wPx  = col.w * W;
+      const hPx  = col.h * H;
+      const x    = cxPx - wPx / 2;
+      const y    = cyPx - hPx / 2;
+      const rPx  = wPx * 0.5; // full pill — width/2 = perfect capsule
+
+      ctx.save();
+      drawRoundRect(x, y, wPx, hPx, rPx);
+      ctx.clip();
+
+      // 1. Base color
+      ctx.fillStyle = col.base;
+      ctx.fillRect(x, y, wPx, hPx);
+
+      // 2. Cylindrical highlight — radial from upper-left area
+      const [hr,hg,hb] = hexRGB(col.hi);
+      const glowX = x + wPx * 0.30;
+      const glowY = y + hPx * 0.18;
+      const glowR = wPx * 1.05;
+      const hl = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, glowR);
+      hl.addColorStop(0,    `rgba(${hr},${hg},${hb},0.82)`);
+      hl.addColorStop(0.28, `rgba(${hr},${hg},${hb},0.28)`);
+      hl.addColorStop(0.65, `rgba(${hr},${hg},${hb},0.06)`);
+      hl.addColorStop(1,    `rgba(${hr},${hg},${hb},0)`);
+      ctx.fillStyle = hl;
+      ctx.fillRect(x, y, wPx, hPx);
+
+      // 3. Edge shadow — darkens left and right edges for cylindrical depth
+      const edge = ctx.createLinearGradient(x, y, x+wPx, y);
+      edge.addColorStop(0,    'rgba(0,0,0,0.50)');
+      edge.addColorStop(0.18, 'rgba(0,0,0,0)');
+      edge.addColorStop(0.80, 'rgba(0,0,0,0)');
+      edge.addColorStop(1,    'rgba(0,0,0,0.55)');
+      ctx.fillStyle = edge;
+      ctx.fillRect(x, y, wPx, hPx);
+
+      // 4. Top/bottom caps fade into background
+      const cap = ctx.createLinearGradient(x, y, x, y+hPx);
+      cap.addColorStop(0,    'rgba(7,8,14,0.60)');
+      cap.addColorStop(0.10, 'rgba(7,8,14,0)');
+      cap.addColorStop(0.90, 'rgba(7,8,14,0)');
+      cap.addColorStop(1,    'rgba(7,8,14,0.60)');
+      ctx.fillStyle = cap;
+      ctx.fillRect(x, y, wPx, hPx);
+
+      // 5. Specular sliver — thin bright line near left edge
+      const spec = ctx.createLinearGradient(x, y, x+wPx*0.18, y);
+      spec.addColorStop(0,   'rgba(255,255,255,0)');
+      spec.addColorStop(0.4, `rgba(${hr},${hg},${hb},0.18)`);
+      spec.addColorStop(1,   'rgba(255,255,255,0)');
+      ctx.fillStyle = spec;
+      ctx.fillRect(x, y, wPx*0.18, hPx);
+
+      ctx.restore();
+    });
+
+    // Central radial darken — text centre is clear, edges darker
+    const vig = ctx.createRadialGradient(W*0.5, H*0.5, H*0.04, W*0.5, H*0.5, W*0.6);
+    vig.addColorStop(0,   'rgba(7,8,14,0.52)');
+    vig.addColorStop(0.45,'rgba(7,8,14,0.18)');
+    vig.addColorStop(1,   'rgba(7,8,14,0)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+
+    rafId = requestAnimationFrame(draw);
+  }
+
+  const hero = canvas.parentElement;
+  if (!isMobile) {
+    hero.addEventListener('mousemove', e => {
+      const r = hero.getBoundingClientRect();
+      mouse.x = (e.clientX - r.left) / r.width;
+      mouse.y = (e.clientY - r.top)  / r.height;
+    }, {passive:true});
+    hero.addEventListener('mouseleave', () => { mouse.x=0.5; mouse.y=0.5; }, {passive:true});
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { if (!rafId) rafId=requestAnimationFrame(draw); }
+      else { cancelAnimationFrame(rafId); rafId=null; }
+    });
+  }, {threshold:0});
+  io.observe(canvas);
+
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+  rafId = requestAnimationFrame(draw);
+})();
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderGrid();
+</script>
+
+<!-- TWEAKS PANEL -->
+<div id="tweaks-panel" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;background:#fff;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.18);padding:20px 24px;width:250px;flex-direction:column;gap:16px;font-family:var(--font);border:1px solid var(--hairline);">
+  <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:14px;font-weight:600;color:var(--ink);">Tweaks</span><button onclick="showTw(false);window.parent.postMessage({type:'__edit_mode_dismissed'},'*');" style="border:none;background:none;cursor:pointer;font-size:18px;color:var(--ink-48);">×</button></div>
+  <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12px;color:var(--ink-48);font-weight:500;">Accent color</label><div style="display:flex;gap:8px;flex-wrap:wrap;"><button onclick="setTw('accentColor','#0066cc')" style="width:26px;height:26px;border-radius:50%;background:#0066cc;border:2px solid transparent;cursor:pointer;"></button><button onclick="setTw('accentColor','#7c3aed')" style="width:26px;height:26px;border-radius:50%;background:#7c3aed;border:2px solid transparent;cursor:pointer;"></button><button onclick="setTw('accentColor','#059669')" style="width:26px;height:26px;border-radius:50%;background:#059669;border:2px solid transparent;cursor:pointer;"></button><button onclick="setTw('accentColor','#dc2626')" style="width:26px;height:26px;border-radius:50%;background:#dc2626;border:2px solid transparent;cursor:pointer;"></button></div></div>
+  <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12px;color:var(--ink-48);font-weight:500;">Hero size: <span id="hs-val">88</span>px</label><input type="range" min="56" max="120" step="4" value="88" oninput="setTw('heroSize',+this.value);document.getElementById('hs-val').textContent=this.value;" style="width:100%;"/></div>
+</div>
+
+</body>
+</html>
