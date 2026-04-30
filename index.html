@@ -214,6 +214,13 @@
     .portrait-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; border-radius: 18px; cursor: pointer; }
     .admin-active .portrait-edit-overlay { display: flex; }
     .portrait-edit-btn { background: #fff; color: var(--ink); border: none; border-radius: 9999px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font); pointer-events: none; }
+    .fab-btn:disabled { opacity: 0.6; cursor: wait; transform: none !important; }
+    @keyframes fab-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+    .fab-btn.loading { animation: fab-pulse 1s ease-in-out infinite; }
+    #save-toast { position: fixed; bottom: 110px; right: 32px; z-index: 600; padding: 10px 18px; border-radius: 9999px; font-size: 13px; font-weight: 500; font-family: var(--font); opacity: 0; transform: translateY(8px); transition: opacity .25s, transform .25s; pointer-events: none; white-space: nowrap; }
+    #save-toast.show { opacity: 1; transform: translateY(0); }
+    #save-toast.ok { background: #16a34a; color: #fff; }
+    #save-toast.err { background: #dc2626; color: #fff; }
 
     /* ── MODALS ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 600; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
@@ -339,7 +346,7 @@
   <section class="about" id="about">
     <div class="about-inner">
       <div class="about-photo" style="position:relative;">
-        <img id="portrait-img" alt="Marta Zuliani" />
+        <img id="portrait-img" src="" alt="Marta Zuliani" />
         <div class="photo-placeholder" id="photo-placeholder"><span class="photo-label">portrait photo</span></div>
         <div class="portrait-edit-overlay" onclick="document.getElementById('portrait-input').click()">
           <button class="portrait-edit-btn">Carica foto</button>
@@ -447,6 +454,12 @@
     <p class="modal-sub">Inserisci la password per modificare il portfolio.</p>
     <input class="m-input" type="password" id="pwd-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPwd()" />
     <p class="m-error" id="pwd-err">Password non corretta.</p>
+    <div style="margin-top:20px;">
+      <label style="font-size:13px;font-weight:500;color:var(--ink-80);display:block;margin-bottom:6px;">GitHub Personal Access Token</label>
+      <input class="m-input" type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" onkeydown="if(event.key==='Enter')checkPwd()" />
+      <p style="font-size:11px;color:var(--ink-48);margin-top:6px;">Necessario per salvare sul repository. Tenuto solo in sessione.</p>
+      <p class="m-error" id="pat-err">Inserisci un GitHub Personal Access Token.</p>
+    </div>
     <div class="m-actions">
       <button class="btn-sec" onclick="closePwdModal()">Annulla</button>
       <button class="btn-pri" onclick="checkPwd()">Accedi</button>
@@ -538,12 +551,12 @@
 // ── DATA ─────────────────────────────────────────────────────────────────────
 const SK = 'marta_portfolio_v2';
 
-const DEFAULTS = [
+const DEFAULTS = /*DEFAULTS-BEGIN*/[
   { id:'ftv-monitoring', featured:true, order:0, year:'2023', title:'FTV Monitoring — Photovoltaic Plant Intelligence', subtitle:'Designed a web and mobile platform for real-time monitoring of photovoltaic plants for A2A, developed for both internal operations and external commercialisation. Led a team of 1 designer and 4 developers.', client:'A2A Digital Hub', role:'Lead Product Designer', duration:'2023 — Present', team:'1 designer, 4 developer, partner data & hardware', tags:['Energy','Product Design','B2B Platform','PwC'], coverImage:null, coverGradient:'linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)', challenge:"A2A manages a growing portfolio of photovoltaic plants across Italy, but monitoring relied on fragmented tools and manual reporting. Field operators lacked real-time visibility; management had no single source of truth.", approach:"I ran parallel discovery tracks — shadowing field operators and conducting structured interviews with management. Co-design workshops with both groups validated assumptions before any screen was drawn.", solution:"FTV Monitoring is structured around a role-aware dashboard. Operators land on a live plant map with real-time fault indicators. Managers get aggregated performance KPIs. A modular widget system allows plants of any scale to be onboarded without custom development.", outcomeStats:[{number:'1st',label:'Plant connected and live in pilot'},{number:'2-in-1',label:'Single platform for internal ops and external clients'},{number:'↓ Dev',label:'Modular widget system reduces onboarding effort'}], gallery:[] },
   { id:'app-insight', featured:false, order:1, year:'2023', title:'App Insight — Executive KPI Dashboard', subtitle:'Custom B2B application enabling A2A top management to monitor strategic KPIs with self-BI features, social interactions, and audio data playback in podcast format.', client:'A2A Digital Hub', role:'Lead Product Designer', duration:'12 mesi', team:'', tags:['Energy','Product Design','Data Visualisation'], coverImage:null, coverGradient:'linear-gradient(135deg,#0a1a3d 0%,#1a3a7a 50%,#2a5ab8 100%)', challenge:"A2A's top management were drowning in spreadsheets and siloed tools. Strategic KPIs lived in different systems with no shared view of what mattered most.", approach:"I interviewed 12 executives to map actual information-seeking behaviours. Key insight: most strategic check-ins happen in transit — shaping a mobile-first, audio-mode design.", solution:"App Insight unifies three modes: a self-BI dashboard with customisable views, a social layer for inline comments on data, and an audio brief that reads key KPIs aloud as a personal daily podcast.", outcomeStats:[{number:'12mo',label:'Full design-to-delivery cycle owned end-to-end'},{number:'3-in-1',label:'Dashboard, social, and audio unified'},{number:'↑ NPS',label:'Positive feedback during rollout'}], gallery:[] },
   { id:'cassa-centrale', featured:false, order:2, year:'2022', title:'Mobile Banking App Redesign', subtitle:'Service Design Lead for the research phase — 17 management interviews, 277 in-app feedback entries, 253 user reviews analysed, 4 competitors benchmarked.', client:'Cassa Centrale Banca', role:'Service Design Lead — Research Phase', duration:'4 mesi', team:'', tags:['Financial Services','Service Design','User Research'], coverImage:null, coverGradient:'linear-gradient(135deg,#1a0a2a 0%,#3a1a5c 50%,#6a3a9c 100%)', challenge:"Cassa Centrale Banca's mobile app was underperforming: low engagement, below-average store ratings, and a gap between digital ambitions and customer experience.", approach:"A rigorous four-month research phase combining 17 management interviews, 277 in-app feedback entries, 253 user reviews, and competitive benchmarking of 4 direct competitors and 3 comparables.", solution:"A synthesis framework mapping user pain points to business priorities — giving the design team an evidence-backed brief. App was redesigned; store ratings improved post-release.", outcomeStats:[{number:'↑',label:'Store ratings improved post-release'},{number:'4mo',label:'Research phase delivered on schedule'},{number:'547+',label:'Data points analysed across all sources'}], gallery:[] },
   { id:'fascicolo-cittadino', featured:false, order:3, year:'2021', title:'Fascicolo del Cittadino — Comune di Milano', subtitle:'End-to-end design of a citizen-facing app for the Municipality of Milan — research, co-design workshops with citizens, design system, UX prototype, and usability testing.', client:'Comune di Milano', role:'Service Designer', duration:'6 mesi', team:'', tags:['Public Administration','Service Design','Co-design'], coverImage:null, coverGradient:'linear-gradient(135deg,#1a1200 0%,#4a3400 50%,#8a6200 100%)', challenge:"Milan's citizens interact with dozens of municipal services through fragmented channels. The challenge: design a single, unified app usable by the full spectrum of the population.", approach:"Full human-centred design process: research, benchmarking, and co-design workshops with citizen panels — deliberately including underrepresented groups.", solution:"The app is organised around life events rather than administrative categories, with a WCAG AA-compliant design system, plain-language microcopy, and a pattern library validated through usability testing.", outcomeStats:[{number:'6mo',label:'Full end-to-end cycle delivered on time'},{number:'100%',label:'WCAG AA compliance across all screens'},{number:'5+',label:'Citizen profiles tested in usability sessions'}], gallery:[] }
-];
+]/*DEFAULTS-END*/;
 
 function getProjects() {
   try { const d=localStorage.getItem(SK); if(!d){saveProjects(DEFAULTS);return DEFAULTS;} return JSON.parse(d); }
@@ -693,6 +706,12 @@ function renderProjectDetail(p, all) {
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
 const ADMIN_PWD = 'marta2026';
+const GH_OWNER = 'MartaZu';
+const GH_REPO  = 'Portfolio';
+const GH_BRANCH = 'main';
+const GH_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
+const PAT_KEY = 'portfolio_gh_pat';
+
 let adminActive = false;
 let footerClicks = 0, footerTimer = null;
 
@@ -706,13 +725,23 @@ document.getElementById('footer-trigger').addEventListener('click',()=>{
 function openPwdModal() {
   document.getElementById('pwd-input').value='';
   document.getElementById('pwd-err').style.display='none';
+  document.getElementById('pat-input').value='';
+  document.getElementById('pat-err').style.display='none';
   document.getElementById('pwd-modal').classList.add('open');
   setTimeout(()=>document.getElementById('pwd-input').focus(),100);
 }
-function closePwdModal() { document.getElementById('pwd-modal').classList.remove('open'); }
+function closePwdModal() {
+  document.getElementById('pwd-modal').classList.remove('open');
+  document.getElementById('pat-input').value='';
+}
 function checkPwd() {
-  if (document.getElementById('pwd-input').value===ADMIN_PWD) { closePwdModal(); activateAdmin(); }
-  else { document.getElementById('pwd-err').style.display='block'; }
+  const pwd = document.getElementById('pwd-input').value;
+  const pat = document.getElementById('pat-input').value.trim();
+  if (pwd !== ADMIN_PWD) { document.getElementById('pwd-err').style.display='block'; return; }
+  if (!pat) { document.getElementById('pat-err').style.display='block'; return; }
+  sessionStorage.setItem(PAT_KEY, pat);
+  closePwdModal();
+  activateAdmin();
 }
 function activateAdmin() {
   adminActive=true;
@@ -723,43 +752,186 @@ function exitAdmin() {
   adminActive=false;
   document.body.classList.remove('admin-active');
   document.querySelectorAll('[data-ce-key]').forEach(el => { el.contentEditable='false'; el.removeAttribute('contenteditable'); });
+  sessionStorage.removeItem(PAT_KEY);
 }
 
-const CE_KEY = 'portfolio_content_v1';
-const PORTRAIT_KEY = 'portfolio_portrait_v1';
-
-function loadContent() {
-  const portrait = localStorage.getItem(PORTRAIT_KEY);
-  if (portrait) setPortraitSrc(portrait);
-  const saved = JSON.parse(localStorage.getItem(CE_KEY)||'{}');
-  document.querySelectorAll('[data-ce-key]').forEach(el => {
-    const v = saved[el.dataset.ceKey];
-    if (v !== undefined) el.innerHTML = v;
+// ── GITHUB API ────────────────────────────────────────────────────────────────
+function ghHeaders() {
+  return { 'Authorization':'token '+sessionStorage.getItem(PAT_KEY), 'Accept':'application/vnd.github.v3+json', 'Content-Type':'application/json' };
+}
+async function ghGetFile(path) {
+  const r = await fetch(`${GH_API}/${path}?ref=${GH_BRANCH}`, { headers: ghHeaders() });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(`GET ${path}: ${r.status} ${e.message||''}`); }
+  return r.json();
+}
+async function ghPutFile(path, b64, sha, msg) {
+  const body = { message: msg||`update ${path}`, content: b64, branch: GH_BRANCH };
+  if (sha) body.sha = sha;
+  const r = await fetch(`${GH_API}/${path}`, { method:'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(`PUT ${path}: ${r.status} ${e.message||''}`); }
+  return r.json();
+}
+function strToB64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let bin = ''; bytes.forEach(b => bin += String.fromCharCode(b));
+  return btoa(bin);
+}
+function b64ToStr(b64) {
+  const bin = atob(b64.replace(/\n/g,''));
+  const bytes = new Uint8Array(bin.length);
+  for (let i=0; i<bin.length; i++) bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function fileToB64(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = e => res(e.target.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
   });
 }
 
+// ── HTML PATCH HELPERS ────────────────────────────────────────────────────────
+function applyTextChanges(htmlStr) {
+  document.querySelectorAll('[data-ce-key]').forEach(el => {
+    const key = el.dataset.ceKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const closing = '<\\/' + el.tagName.toLowerCase() + '>';
+    htmlStr = htmlStr.replace(
+      new RegExp(`(data-ce-key="${key}"[^>]*>)([\\s\\S]*?)(${closing})`),
+      (_, open, _old, close) => open + el.innerHTML + close
+    );
+  });
+  return htmlStr;
+}
+function replacePortraitSrc(htmlStr, src) {
+  return htmlStr.replace(
+    /(<img\b[^>]*\bid="portrait-img"[^>]*\bsrc=")[^"]*(")/,
+    `$1${src}$2`
+  );
+}
+function replaceDefaultsBlock(htmlStr, projects) {
+  const clean = projects.map(p => {
+    const c = Object.assign({}, p);
+    delete c._coverFile; delete c._galleryFiles;
+    if (c.coverImage && c.coverImage.startsWith('data:')) c.coverImage = null;
+    if (c.gallery) c.gallery = c.gallery.map(g => g && g.startsWith('data:') ? null : g);
+    return c;
+  });
+  return htmlStr.replace(
+    /\/\*DEFAULTS-BEGIN\*\/[\s\S]*?\/\*DEFAULTS-END\*\//,
+    `/*DEFAULTS-BEGIN*/${JSON.stringify(clean)}/*DEFAULTS-END*/`
+  );
+}
+
+// ── PORTRAIT ──────────────────────────────────────────────────────────────────
+let _pendingPortraitFile = null;
+
+function loadContent() {
+  const img = document.getElementById('portrait-img');
+  if (img.getAttribute('src')) {
+    img.style.display = 'block';
+    document.getElementById('photo-placeholder').style.display = 'none';
+  }
+}
 function setPortraitSrc(src) {
   const img = document.getElementById('portrait-img');
-  const ph = document.getElementById('photo-placeholder');
   img.src = src;
   img.style.display = 'block';
-  ph.style.display = 'none';
+  document.getElementById('photo-placeholder').style.display = 'none';
 }
-
 function handlePortraitFile(file) {
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => { localStorage.setItem(PORTRAIT_KEY, e.target.result); setPortraitSrc(e.target.result); };
-  reader.readAsDataURL(file);
+  _pendingPortraitFile = file;
+  const r = new FileReader();
+  r.onload = e => setPortraitSrc(e.target.result);
+  r.readAsDataURL(file);
 }
 
-function saveContent() {
-  const data = {};
-  document.querySelectorAll('[data-ce-key]').forEach(el => { data[el.dataset.ceKey] = el.innerHTML; });
-  localStorage.setItem(CE_KEY, JSON.stringify(data));
+// ── SAVE TO GITHUB ────────────────────────────────────────────────────────────
+async function saveContent() {
+  const pat = sessionStorage.getItem(PAT_KEY);
+  if (!pat) { showToast('Nessun token — esci e rientra in admin.', 'err'); return; }
+
+  setSaveLoading(true);
+  try {
+    // 1. Fetch current index.html from GitHub
+    const current = await ghGetFile('index.html');
+    const indexSha = current.sha;
+    let html = b64ToStr(current.content);
+
+    // 2. Upload portrait if new file selected
+    if (_pendingPortraitFile) {
+      const MAX = 5*1024*1024;
+      if (_pendingPortraitFile.size > MAX) throw new Error('Immagine troppo grande (max 5 MB)');
+      const ext = (_pendingPortraitFile.name.split('.').pop()||'jpg').toLowerCase();
+      const path = `images/portrait.${ext}`;
+      const b64 = await fileToB64(_pendingPortraitFile);
+      let sha = null;
+      try { sha = (await ghGetFile(path)).sha; } catch(e) {}
+      await ghPutFile(path, b64, sha, 'update portrait photo');
+      html = replacePortraitSrc(html, path);
+      setPortraitSrc(path);
+      _pendingPortraitFile = null;
+    }
+
+    // 3. Upload project cover/gallery images stored as base64 data URLs
+    let projects = getProjects();
+    for (const p of projects) {
+      if (p.coverImage && p.coverImage.startsWith('data:')) {
+        const ext = (p.coverImage.match(/data:image\/(\w+)/)||['','jpg'])[1];
+        const path = `images/cover-${p.id}.${ext}`;
+        const b64 = p.coverImage.split(',')[1];
+        let sha = null;
+        try { sha = (await ghGetFile(path)).sha; } catch(e) {}
+        await ghPutFile(path, b64, sha, `update cover ${p.id}`);
+        p.coverImage = path;
+      }
+      if (p.gallery && p.gallery.length) {
+        for (let i=0; i<p.gallery.length; i++) {
+          const g = p.gallery[i];
+          if (g && g.startsWith('data:')) {
+            const ext = (g.match(/data:image\/(\w+)/)||['','jpg'])[1];
+            const path = `images/gallery-${p.id}-${i}.${ext}`;
+            const b64 = g.split(',')[1];
+            let sha = null;
+            try { sha = (await ghGetFile(path)).sha; } catch(e) {}
+            await ghPutFile(path, b64, sha, `update gallery ${p.id}`);
+            p.gallery[i] = path;
+          }
+        }
+      }
+    }
+    saveProjects(projects);
+
+    // 4. Apply text edits and update DEFAULTS
+    html = applyTextChanges(html);
+    html = replaceDefaultsBlock(html, projects);
+
+    // 5. Commit index.html
+    await ghPutFile('index.html', strToB64(html), indexSha, 'content: update portfolio via admin');
+
+    showToast('Pubblicato su GitHub ✓ (live in ~1 min)', 'ok');
+  } catch(err) {
+    console.error(err);
+    showToast('Errore: ' + err.message, 'err');
+  } finally {
+    setSaveLoading(false);
+  }
+}
+
+function setSaveLoading(on) {
+  const btn = document.querySelector('#admin-fab button[onclick*="saveContent"]');
   const lbl = document.getElementById('save-fab-lbl');
-  lbl.textContent = 'Salvato ✓';
-  setTimeout(() => lbl.textContent = 'Salva modifiche', 2000);
+  btn.disabled = on;
+  btn.classList.toggle('loading', on);
+  lbl.textContent = on ? 'Salvataggio...' : 'Salva modifiche';
+}
+function showToast(msg, type) {
+  const t = document.getElementById('save-toast');
+  t.textContent = msg;
+  t.className = 'show ' + (type||'ok');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className = '', 5000);
 }
 function deleteProject(id) {
   if (!confirm('Eliminare questo progetto?')) return;
@@ -893,5 +1065,6 @@ loadContent();
   <div style="display:flex;flex-direction:column;gap:6px;"><label style="font-size:12px;color:var(--ink-48);font-weight:500;">Hero size: <span id="hs-val">88</span>px</label><input type="range" min="56" max="120" step="4" value="88" oninput="setTw('heroSize',+this.value);document.getElementById('hs-val').textContent=this.value;" style="width:100%;"/></div>
 </div>
 
+<div id="save-toast"></div>
 </body>
 </html>
