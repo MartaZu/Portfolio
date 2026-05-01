@@ -178,12 +178,10 @@
     .pd-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
     .pd-text + .pd-text { margin-top: 14px; }
     .pd-gallery { margin-bottom: 64px; }
-    .pd-gallery-grid { display: grid; gap: 12px; }
-    .pd-gallery-grid.g1 { grid-template-columns: 1fr; }
-    .pd-gallery-grid.g2 { grid-template-columns: 1fr 1fr; }
-    .pd-gallery-grid.g3 { grid-template-columns: repeat(3,1fr); }
-    .pd-gallery-grid.g4 { grid-template-columns: repeat(2,1fr); }
-    .pd-gallery-item { border-radius: 14px; overflow: hidden; }
+    .pd-gallery-scroll { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
+    .pd-gallery-scroll::-webkit-scrollbar { display: none; }
+    .pd-gallery-item { flex: 0 0 calc(50% - 6px); border-radius: 14px; overflow: hidden; scroll-snap-align: start; }
+    .pd-gallery-item:only-child { flex: 0 0 100%; }
     .pd-gallery-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
     .pd-outcomes { display: grid; gap: 18px; margin-bottom: 64px; }
     .pd-outcomes.o1 { grid-template-columns: 1fr; max-width: 300px; }
@@ -703,7 +701,7 @@ function renderProjectDetail(p, all) {
   }
 
   const galleryItems = (p.gallery||[]).filter(g=>g&&(typeof g==='object'?g.src:g));
-  const galleryHTML = galleryItems.length ? `<div class="pd-gallery"><div class="pd-gallery-grid ${['','g1','g2','g3','g4'][Math.min(galleryItems.length,4)]||'g4'}">${galleryItems.map(g=>{const src=typeof g==='object'?g.src:g; return `<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`;}).join('')}</div></div>` : '';
+  const galleryHTML = galleryItems.length ? `<div class="pd-gallery"><div class="pd-gallery-scroll">${galleryItems.map(g=>{const src=typeof g==='object'?g.src:g; return `<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`;}).join('')}</div></div>` : '';
 
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
   const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
