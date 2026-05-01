@@ -182,8 +182,8 @@
     .pd-carousel-view { position: relative; overflow: hidden; }
     .pd-carousel-track { display: flex; transition: transform 0.35s cubic-bezier(.25,.46,.45,.94); }
     .pd-carousel-slide { min-width: 100%; flex-shrink: 0; }
-    .pd-carousel-img-wrap { aspect-ratio: 16/9; overflow: hidden; }
-    .pd-carousel-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pd-carousel-img-wrap { aspect-ratio: 16/9; overflow: hidden; background: #f5f5f7; display: flex; align-items: center; justify-content: center; }
+    .pd-carousel-img-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .pd-carousel-caption { font-size: 14px; color: var(--ink-48); text-align: center; padding: 14px 24px 16px; line-height: 1.45; }
     .pd-carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background 0.15s; z-index: 5; }
     .pd-carousel-btn:hover { background: #fff; }
@@ -288,7 +288,10 @@
     .gthumb-del { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
     .gcaption { width: 100%; border: none; border-top: 1px solid var(--hairline); background: transparent; font-size: 11px; padding: 4px 6px; color: var(--ink-80); font-family: var(--font); box-sizing: border-box; }
     .gcaption:focus { outline: none; background: rgba(0,102,204,0.04); }
+    .gcaption::placeholder { color: var(--ink-48); }
     .upload-err { font-size: 12px; color: #dc2626; margin-top: 6px; display: none; }
+    .gallery-preview { display: none; margin-top: 20px; }
+    .gallery-preview .pd-carousel { border: 1px solid var(--hairline); }
     .outcome-rows { display: flex; flex-direction: column; gap: 10px; }
     .outcome-row { display: grid; grid-template-columns: 110px 1fr 28px; gap: 8px; align-items: center; }
     .outcome-add-btn { font-size: 13px; color: var(--blue); background: none; border: none; cursor: pointer; font-family: var(--font); padding: 4px 0; text-align: left; }
@@ -562,10 +565,12 @@
         <div class="gallery-drop">
           <input type="file" accept="image/*" multiple onchange="handleGalleryFiles(this.files)" />
           <div class="up-icon">⬆</div>
-          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini · max 5 MB cad.</p>
+          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini</p>
+          <p class="up-hint" style="font-size:12px;margin-top:4px;">Formato consigliato: <strong>1600 × 900 px</strong> · 16:9 · JPG o PNG · max 5 MB</p>
         </div>
         <p id="gallery-upload-err" class="upload-err"></p>
         <div class="gallery-thumbs" id="gallery-thumbs"></div>
+        <div id="gallery-preview" class="gallery-preview"></div>
       </div>
       <div>
         <p class="pf-sec-ttl">Impostazioni</p>
@@ -1157,10 +1162,37 @@ function addGalleryThumb(item, idx) {
   const src = typeof item==='object' ? item.src : item;
   const cap = typeof item==='object' ? (item.caption||'') : '';
   const d=document.createElement('div'); d.className='gthumb'; d.dataset.idx=idx;
-  d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button><input class="gcaption" type="text" placeholder="Didascalia..." value="${esc(cap)}" />`;
+  d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button><input class="gcaption" type="text" placeholder="Didascalia..." value="${esc(cap)}" oninput="updateGalleryPreview()" />`;
   document.getElementById('gallery-thumbs').appendChild(d);
+  updateGalleryPreview();
 }
-function removeThumb(btn,idx) { _gallery[idx]=null; btn.closest('.gthumb').remove(); }
+function removeThumb(btn,idx) { _gallery[idx]=null; btn.closest('.gthumb').remove(); updateGalleryPreview(); }
+
+function updateGalleryPreview() {
+  const preview = document.getElementById('gallery-preview');
+  if (!preview) return;
+  // sync live caption values into _gallery
+  document.querySelectorAll('#gallery-thumbs .gthumb').forEach(el => {
+    const i = parseInt(el.dataset.idx);
+    const inp = el.querySelector('.gcaption');
+    if (_gallery[i] && typeof _gallery[i]==='object' && inp) _gallery[i].caption = inp.value;
+  });
+  const items = _gallery.filter(g => g && (typeof g==='object' ? g.src : g));
+  if (!items.length) { preview.style.display='none'; return; }
+  preview.style.display = 'block';
+  const cid = 'gp-carousel';
+  const prevCur = parseInt(document.getElementById(cid)?.dataset?.cur||'0');
+  const slides = items.map(g => {
+    const src = typeof g==='object' ? g.src : g;
+    const cap = typeof g==='object' ? (g.caption||'') : '';
+    return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" /></div>${cap ? `<p class="pd-carousel-caption">${esc(cap)}</p>` : '<p class="pd-carousel-caption" style="opacity:0.35;font-style:italic">Nessuna didascalia</p>'}</div>`;
+  }).join('');
+  const nav = items.length>1 ? `<button class="pd-carousel-btn prev" onclick="carouselNav('${cid}',-1)">←</button><button class="pd-carousel-btn next" onclick="carouselNav('${cid}',1)">→</button>` : '';
+  const dots = items.length>1 ? `<div class="pd-carousel-dots">${items.map((_,i)=>`<button class="pd-dot${i===0?' active':''}" onclick="carouselGoTo('${cid}',${i})"></button>`).join('')}</div>` : '';
+  preview.innerHTML = `<p class="pf-sec-ttl">Anteprima carosello</p><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}</div>${dots}</div>`;
+  const safeIdx = Math.min(prevCur, items.length-1);
+  if (safeIdx > 0) carouselGoTo(cid, safeIdx);
+}
 
 let _oc=0;
 function addOutcomeRow(n='',l='') {
