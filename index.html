@@ -178,11 +178,16 @@
     .pd-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
     .pd-text + .pd-text { margin-top: 14px; }
     .pd-gallery { margin-bottom: 64px; }
+    .pd-gallery-wrap { position: relative; }
     .pd-gallery-scroll { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 2px; }
     .pd-gallery-scroll::-webkit-scrollbar { display: none; }
     .pd-gallery-item { flex: 0 0 calc(50% - 6px); border-radius: 14px; overflow: hidden; scroll-snap-align: start; }
     .pd-gallery-item:only-child { flex: 0 0 100%; }
     .pd-gallery-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .gal-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.15); transition: background 0.15s; }
+    .gal-btn:hover { background: #fff; }
+    .gal-btn.prev { left: -16px; }
+    .gal-btn.next { right: -16px; }
     .pd-outcomes { display: grid; gap: 18px; margin-bottom: 64px; }
     .pd-outcomes.o1 { grid-template-columns: 1fr; max-width: 300px; }
     .pd-outcomes.o2 { grid-template-columns: 1fr 1fr; }
@@ -701,7 +706,9 @@ function renderProjectDetail(p, all) {
   }
 
   const galleryItems = (p.gallery||[]).filter(g=>g&&(typeof g==='object'?g.src:g));
-  const galleryHTML = galleryItems.length ? `<div class="pd-gallery"><div class="pd-gallery-scroll">${galleryItems.map(g=>{const src=typeof g==='object'?g.src:g; return `<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`;}).join('')}</div></div>` : '';
+  const galItems = galleryItems.map(g=>{const src=typeof g==='object'?g.src:g; return `<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`;}).join('');
+  const galBtns = galleryItems.length>2 ? `<button class="gal-btn prev" onclick="galScroll(this,-1)">←</button><button class="gal-btn next" onclick="galScroll(this,1)">→</button>` : '';
+  const galleryHTML = galleryItems.length ? `<div class="pd-gallery"><div class="pd-gallery-wrap">${galBtns}<div class="pd-gallery-scroll">${galItems}</div></div></div>` : '';
 
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
   const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
@@ -743,6 +750,12 @@ function renderProjectDetail(p, all) {
   },100);
 }
 
+
+function galScroll(btn, dir) {
+  const scroll = btn.closest('.pd-gallery-wrap').querySelector('.pd-gallery-scroll');
+  const item = scroll.querySelector('.pd-gallery-item');
+  if (item) scroll.scrollBy({ left: dir * (item.offsetWidth + 12), behavior: 'smooth' });
+}
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
 const ADMIN_PWD = 'marta2026';
