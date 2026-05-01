@@ -178,20 +178,20 @@
     .pd-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
     .pd-text + .pd-text { margin-top: 14px; }
     .pd-gallery { margin-bottom: 64px; }
-    .pd-carousel { border-radius: 16px; overflow: hidden; background: var(--parchment); }
+    .pd-carousel { border-radius: 20px; overflow: hidden; }
     .pd-carousel-view { position: relative; overflow: hidden; }
     .pd-carousel-track { display: flex; transition: transform 0.35s cubic-bezier(.25,.46,.45,.94); }
     .pd-carousel-slide { min-width: 100%; flex-shrink: 0; }
-    .pd-carousel-img-wrap { aspect-ratio: 16/8; overflow: hidden; background: #f5f5f7; display: flex; align-items: center; justify-content: center; }
+    .pd-carousel-img-wrap { aspect-ratio: 16/8; overflow: hidden; background: #f5f5f7; position: relative; }
     .pd-carousel-img-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .pd-carousel-caption { font-size: 14px; color: var(--ink-48); text-align: center; padding: 14px 24px 16px; line-height: 1.45; }
+    .pd-carousel-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 24px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); font-size: 13px; color: rgba(255,255,255,0.92); text-align: center; line-height: 1.45; pointer-events: none; }
     .pd-carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background 0.15s; z-index: 5; }
     .pd-carousel-btn:hover { background: #fff; }
     .pd-carousel-btn.prev { left: 12px; }
     .pd-carousel-btn.next { right: 12px; }
-    .pd-carousel-dots { display: flex; justify-content: center; gap: 6px; padding: 12px 24px 14px; }
-    .pd-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-48); opacity: 0.35; cursor: pointer; transition: opacity 0.2s, background 0.2s; border: none; padding: 0; }
-    .pd-dot.active { background: var(--blue); opacity: 1; }
+    .pd-carousel-dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
+    .pd-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.6); cursor: pointer; transition: background 0.2s, transform 0.2s; border: none; padding: 0; pointer-events: all; }
+    .pd-dot.active { background: #fff; transform: scale(1.3); }
     .pd-outcomes { display: grid; gap: 18px; margin-bottom: 64px; }
     .pd-outcomes.o1 { grid-template-columns: 1fr; max-width: 300px; }
     .pd-outcomes.o2 { grid-template-columns: 1fr 1fr; }
@@ -715,11 +715,11 @@ function renderProjectDetail(p, all) {
     const slides = galleryItems.map(g=>{
       const src = typeof g==='object'?g.src:g;
       const cap = typeof g==='object'?(g.caption||''):'';
-      return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" loading="lazy" /></div>${cap?`<p class="pd-carousel-caption">${esc(cap)}</p>`:''}</div>`;
+      return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" loading="lazy" />${cap?`<p class="pd-carousel-caption">${esc(cap)}</p>`:''}</div></div>`;
     }).join('');
     const nav = galleryItems.length>1 ? `<button class="pd-carousel-btn prev" onclick="carouselNav('${cid}',-1)">←</button><button class="pd-carousel-btn next" onclick="carouselNav('${cid}',1)">→</button>` : '';
     const dots = galleryItems.length>1 ? `<div class="pd-carousel-dots">${galleryItems.map((_,i)=>`<button class="pd-dot${i===0?' active':''}" onclick="carouselGoTo('${cid}',${i})"></button>`).join('')}</div>` : '';
-    galleryHTML = `<div class="pd-gallery"><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}</div>${dots}</div></div>`;
+    galleryHTML = `<div class="pd-gallery"><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}${dots}</div></div></div>`;
   }
 
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
@@ -1186,11 +1186,12 @@ function updateGalleryPreview() {
   const slides = items.map(g => {
     const src = typeof g==='object' ? g.src : g;
     const cap = typeof g==='object' ? (g.caption||'') : '';
-    return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" /></div>${cap ? `<p class="pd-carousel-caption">${esc(cap)}</p>` : '<p class="pd-carousel-caption" style="opacity:0.35;font-style:italic">Nessuna didascalia</p>'}</div>`;
+    const capHTML = cap ? `<p class="pd-carousel-caption">${esc(cap)}</p>` : `<p class="pd-carousel-caption" style="font-style:italic;opacity:0.5">Nessuna didascalia</p>`;
+    return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" />${capHTML}</div></div>`;
   }).join('');
   const nav = items.length>1 ? `<button class="pd-carousel-btn prev" onclick="carouselNav('${cid}',-1)">←</button><button class="pd-carousel-btn next" onclick="carouselNav('${cid}',1)">→</button>` : '';
   const dots = items.length>1 ? `<div class="pd-carousel-dots">${items.map((_,i)=>`<button class="pd-dot${i===0?' active':''}" onclick="carouselGoTo('${cid}',${i})"></button>`).join('')}</div>` : '';
-  preview.innerHTML = `<p class="pf-sec-ttl">Anteprima carosello</p><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}</div>${dots}</div>`;
+  preview.innerHTML = `<p class="pf-sec-ttl">Anteprima carosello</p><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}${dots}</div></div>`;
   const safeIdx = Math.min(prevCur, items.length-1);
   if (safeIdx > 0) carouselGoTo(cid, safeIdx);
 }
