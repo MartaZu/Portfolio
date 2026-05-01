@@ -178,13 +178,20 @@
     .pd-text { font-size: 17px; line-height: 1.65; color: var(--ink-80); }
     .pd-text + .pd-text { margin-top: 14px; }
     .pd-gallery { margin-bottom: 64px; }
-    .pd-gallery-grid { display: grid; gap: 12px; }
-    .pd-gallery-grid.g1 { grid-template-columns: 1fr; }
-    .pd-gallery-grid.g2 { grid-template-columns: 1fr 1fr; }
-    .pd-gallery-grid.g3 { grid-template-columns: repeat(3,1fr); }
-    .pd-gallery-grid.g4 { grid-template-columns: repeat(2,1fr); }
-    .pd-gallery-item { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; }
-    .pd-gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pd-carousel { border-radius: 16px; overflow: hidden; background: var(--parchment); }
+    .pd-carousel-view { position: relative; overflow: hidden; }
+    .pd-carousel-track { display: flex; transition: transform 0.35s cubic-bezier(.25,.46,.45,.94); }
+    .pd-carousel-slide { min-width: 100%; flex-shrink: 0; }
+    .pd-carousel-img-wrap { aspect-ratio: 16/9; overflow: hidden; }
+    .pd-carousel-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pd-carousel-caption { font-size: 14px; color: var(--ink-48); text-align: center; padding: 14px 24px 16px; line-height: 1.45; }
+    .pd-carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.92); border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background 0.15s; z-index: 5; }
+    .pd-carousel-btn:hover { background: #fff; }
+    .pd-carousel-btn.prev { left: 12px; }
+    .pd-carousel-btn.next { right: 12px; }
+    .pd-carousel-dots { display: flex; justify-content: center; gap: 6px; padding: 12px 24px 14px; }
+    .pd-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-48); opacity: 0.35; cursor: pointer; transition: opacity 0.2s, background 0.2s; border: none; padding: 0; }
+    .pd-dot.active { background: var(--blue); opacity: 1; }
     .pd-outcomes { display: grid; gap: 18px; margin-bottom: 64px; }
     .pd-outcomes.o1 { grid-template-columns: 1fr; max-width: 300px; }
     .pd-outcomes.o2 { grid-template-columns: 1fr 1fr; }
@@ -276,9 +283,12 @@
     .gallery-drop { border: 2px dashed var(--hairline); border-radius: 14px; padding: 20px; text-align: center; cursor: pointer; position: relative; }
     .gallery-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
     .gallery-thumbs { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 10px; }
-    .gthumb { aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; position: relative; }
-    .gthumb img { width: 100%; height: 100%; object-fit: cover; }
+    .gthumb { border-radius: 8px; overflow: hidden; position: relative; background: var(--parchment); border: 1px solid var(--hairline); }
+    .gthumb img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
     .gthumb-del { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; }
+    .gcaption { width: 100%; border: none; border-top: 1px solid var(--hairline); background: transparent; font-size: 11px; padding: 4px 6px; color: var(--ink-80); font-family: var(--font); box-sizing: border-box; }
+    .gcaption:focus { outline: none; background: rgba(0,102,204,0.04); }
+    .upload-err { font-size: 12px; color: #dc2626; margin-top: 6px; display: none; }
     .outcome-rows { display: flex; flex-direction: column; gap: 10px; }
     .outcome-row { display: grid; grid-template-columns: 110px 1fr 28px; gap: 8px; align-items: center; }
     .outcome-add-btn { font-size: 13px; color: var(--blue); background: none; border: none; cursor: pointer; font-family: var(--font); padding: 4px 0; text-align: left; }
@@ -306,7 +316,6 @@
       .proj-card.featured .card-cover { min-height: 220px; }
       .pd-two-col { grid-template-columns: 1fr; gap: 40px; }
       .pd-outcomes.o3 { grid-template-columns: 1fr 1fr; }
-      .pd-gallery-grid.g3 { grid-template-columns: 1fr 1fr; }
       .pf-grid2 { grid-template-columns: 1fr; }
       nav { padding: 0 20px; }
     }
@@ -314,7 +323,6 @@
       .nav-links li:not(:last-child) { display: none; }
       .hero, .about, .cv, .work, .contact { padding-left: 20px; padding-right: 20px; }
       .pd-outcomes.o2, .pd-outcomes.o3 { grid-template-columns: 1fr; }
-      .pd-gallery-grid.g2, .pd-gallery-grid.g3, .pd-gallery-grid.g4 { grid-template-columns: 1fr; }
       .pd-nav-card { flex-direction: column; align-items: flex-start; padding: 24px; }
       .gallery-thumbs { grid-template-columns: repeat(3,1fr); }
     }
@@ -521,8 +529,9 @@
         <div class="cover-drop" id="cover-drop">
           <input type="file" accept="image/*" onchange="handleCoverFile(this.files[0])" />
           <img id="cover-preview-img" class="cover-preview-img" alt="" />
-          <div id="cover-ph"><div class="up-icon">⬆</div><p class="up-hint"><strong>Clicca o trascina</strong> un'immagine</p><p class="up-hint" style="font-size:12px;margin-top:4px;">PNG, JPG, WebP</p></div>
+          <div id="cover-ph"><div class="up-icon">⬆</div><p class="up-hint"><strong>Clicca o trascina</strong> un'immagine</p><p class="up-hint" style="font-size:12px;margin-top:4px;">PNG, JPG, WebP · max 5 MB</p></div>
         </div>
+        <p id="cover-upload-err" class="upload-err"></p>
         <p style="font-size:13px;color:var(--ink-48);margin-top:10px;">Oppure scegli un gradiente:</p>
         <div class="grad-presets" id="grad-presets">
           <div class="grad-preset active" style="background:linear-gradient(135deg,#0a2a14,#1a8f4a)" data-g="linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)"></div>
@@ -553,8 +562,9 @@
         <div class="gallery-drop">
           <input type="file" accept="image/*" multiple onchange="handleGalleryFiles(this.files)" />
           <div class="up-icon">⬆</div>
-          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini</p>
+          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini · max 5 MB cad.</p>
         </div>
+        <p id="gallery-upload-err" class="upload-err"></p>
         <div class="gallery-thumbs" id="gallery-thumbs"></div>
       </div>
       <div>
@@ -692,8 +702,19 @@ function renderProjectDetail(p, all) {
     storyHTML = `<div class="pd-full-col"><p class="pd-kicker">${stories[0].k}</p><h2 class="pd-h2">${stories[0].kk}</h2>${nl2p(stories[0].t)}</div>`;
   }
 
-  const imgs = (p.gallery||[]).filter(Boolean);
-  const galleryHTML = imgs.length ? `<div class="pd-gallery"><div class="pd-gallery-grid ${['','g1','g2','g3','g4'][Math.min(imgs.length,4)]||'g4'}">${imgs.map(src=>`<div class="pd-gallery-item"><img src="${src}" loading="lazy" /></div>`).join('')}</div></div>` : '';
+  const galleryItems = (p.gallery||[]).filter(g=>g&&(typeof g==='object'?g.src:g));
+  let galleryHTML = '';
+  if (galleryItems.length) {
+    const cid = 'carousel-'+p.id;
+    const slides = galleryItems.map(g=>{
+      const src = typeof g==='object'?g.src:g;
+      const cap = typeof g==='object'?(g.caption||''):'';
+      return `<div class="pd-carousel-slide"><div class="pd-carousel-img-wrap"><img src="${src}" loading="lazy" /></div>${cap?`<p class="pd-carousel-caption">${esc(cap)}</p>`:''}</div>`;
+    }).join('');
+    const nav = galleryItems.length>1 ? `<button class="pd-carousel-btn prev" onclick="carouselNav('${cid}',-1)">←</button><button class="pd-carousel-btn next" onclick="carouselNav('${cid}',1)">→</button>` : '';
+    const dots = galleryItems.length>1 ? `<div class="pd-carousel-dots">${galleryItems.map((_,i)=>`<button class="pd-dot${i===0?' active':''}" onclick="carouselGoTo('${cid}',${i})"></button>`).join('')}</div>` : '';
+    galleryHTML = `<div class="pd-gallery"><div class="pd-carousel" id="${cid}" data-cur="0"><div class="pd-carousel-view"><div class="pd-carousel-track">${slides}</div>${nav}</div>${dots}</div></div>`;
+  }
 
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
   const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
@@ -723,13 +744,28 @@ function renderProjectDetail(p, all) {
 
   // animate
   setTimeout(()=>{
-    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-gallery-item').forEach((el,i)=>{
+    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-carousel').forEach((el,i)=>{
       el.style.opacity='0'; el.style.transform='translateY(16px)';
       el.style.transition=`opacity .5s ease ${i*.07}s, transform .5s ease ${i*.07}s`;
     });
     const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';obs.unobserve(e.target);}});},{threshold:.1});
-    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-gallery-item').forEach(el=>obs.observe(el));
+    document.querySelectorAll('.pd-two-col > div, .pd-full-col, .pd-outcome-card, .pd-carousel').forEach(el=>obs.observe(el));
   },100);
+}
+
+// ── CAROUSEL ──────────────────────────────────────────────────────────────────
+function carouselGoTo(id, idx) {
+  const el=document.getElementById(id); if(!el) return;
+  const slides=el.querySelectorAll('.pd-carousel-slide');
+  idx=Math.max(0,Math.min(idx,slides.length-1));
+  el.dataset.cur=idx;
+  el.querySelector('.pd-carousel-track').style.transform=`translateX(-${idx*100}%)`;
+  el.querySelectorAll('.pd-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+function carouselNav(id, dir) {
+  const el=document.getElementById(id); if(!el) return;
+  const n=el.querySelectorAll('.pd-carousel-slide').length;
+  carouselGoTo(id, (parseInt(el.dataset.cur||'0')+dir+n)%n);
 }
 
 // ── ADMIN ─────────────────────────────────────────────────────────────────────
@@ -842,7 +878,11 @@ function replaceDefaultsBlock(htmlStr, projects) {
     const c = Object.assign({}, p);
     delete c._coverFile; delete c._galleryFiles;
     if (c.coverImage && c.coverImage.startsWith('data:')) c.coverImage = null;
-    if (c.gallery) c.gallery = c.gallery.map(g => g && g.startsWith('data:') ? null : g);
+    if (c.gallery) c.gallery = c.gallery.map(g => {
+      if (!g) return null;
+      if (typeof g==='object') return (g.src && g.src.startsWith('data:')) ? null : g;
+      return g.startsWith('data:') ? null : g;
+    });
     return c;
   });
   return htmlStr.replace(
@@ -926,14 +966,16 @@ async function saveContent() {
       if (p.gallery && p.gallery.length) {
         for (let i=0; i<p.gallery.length; i++) {
           const g = p.gallery[i];
-          if (g && g.startsWith('data:')) {
-            const ext = (g.match(/data:image\/(\w+)/)||['','jpg'])[1];
+          const gSrc = g && (typeof g==='object' ? g.src : g);
+          if (gSrc && gSrc.startsWith('data:')) {
+            const ext = (gSrc.match(/data:image\/(\w+)/)||['','jpg'])[1];
             const path = `images/gallery-${p.id}-${i}.${ext}`;
-            const b64 = g.split(',')[1];
+            const b64 = gSrc.split(',')[1];
             let sha = null;
             try { sha = (await ghGetFile(path)).sha; } catch(e) {}
             await ghPutFile(path, b64, sha, `update gallery ${p.id}`);
-            p.gallery[i] = `${path}?v=${ts}`;
+            const caption = typeof g==='object' ? (g.caption||'') : '';
+            p.gallery[i] = { src:`${path}?v=${ts}`, caption };
           }
         }
       }
@@ -1039,8 +1081,8 @@ function openProjectForm(id) {
       document.getElementById('pf-featured').checked=!!p.featured;
       if (p.coverImage) { _cover=p.coverImage; document.getElementById('cover-preview-img').src=p.coverImage; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; }
       else if (p.coverGradient) { _gradient=p.coverGradient; setActiveGrad(p.coverGradient); }
-      _gallery=[...(p.gallery||[])];
-      _gallery.forEach((src,i)=>{ if(src) addGalleryThumb(src,i); });
+      _gallery=(p.gallery||[]).map(g=>{ if(!g) return null; return typeof g==='object' ? g : {src:g,caption:''}; });
+      _gallery.forEach((item,i)=>{ if(item) addGalleryThumb(item,i); });
       (p.outcomeStats||[]).forEach(s=>addOutcomeRow(s.number,s.label));
     }
   } else {
@@ -1076,21 +1118,48 @@ function saveProjectForm() {
     solution:document.getElementById('pf-solution').value.trim(),
     extLink:document.getElementById('pf-ext-link').value.trim(),
     outcomeStats:stats, coverImage:_cover, coverGradient:_gradient,
-    gallery:_gallery.filter(Boolean)
+    gallery:(()=>{ document.querySelectorAll('#gallery-thumbs .gthumb').forEach(el=>{ const i=parseInt(el.dataset.idx); const cap=el.querySelector('.gcaption'); if(_gallery[i] && typeof _gallery[i]==='object' && cap) _gallery[i].caption=cap.value.trim(); }); return _gallery.filter(g=>g && (typeof g==='object'?g.src:g)); })()
   };
   saveProjects(editId ? projects.map(p=>p.id===editId?pd:p) : [...projects,pd]);
   closeProjectForm(); renderGrid();
 }
 
+function showUploadErr(id, msg) { const el=document.getElementById(id); if(el){el.textContent=msg; el.style.display='block';} }
+function clearUploadErr(id) { const el=document.getElementById(id); if(el){el.textContent=''; el.style.display='none';} }
+
 function handleCoverFile(file) {
+  clearUploadErr('cover-upload-err');
   if (!file) return;
-  const r=new FileReader(); r.onload=e=>{ _cover=e.target.result; document.getElementById('cover-preview-img').src=e.target.result; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; }; r.readAsDataURL(file);
+  if (!file.type.startsWith('image/')) { showUploadErr('cover-upload-err','Formato non supportato: usa JPG, PNG o WebP.'); return; }
+  if (file.size > 5*1024*1024) { showUploadErr('cover-upload-err','File troppo grande: il limite è 5 MB.'); return; }
+  const r=new FileReader();
+  r.onerror=()=>showUploadErr('cover-upload-err','Errore durante la lettura del file.');
+  r.onload=e=>{ _cover=e.target.result; document.getElementById('cover-preview-img').src=e.target.result; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; };
+  r.readAsDataURL(file);
 }
 function setActiveGrad(g) { document.querySelectorAll('.grad-preset').forEach(el=>el.classList.toggle('active',el.dataset.g===g)); }
 document.querySelectorAll('.grad-preset').forEach(el=>el.addEventListener('click',()=>{ document.querySelectorAll('.grad-preset').forEach(x=>x.classList.remove('active')); el.classList.add('active'); _gradient=el.dataset.g; _cover=null; document.getElementById('cover-preview-img').style.display='none'; document.getElementById('cover-ph').style.display='block'; }));
 
-function handleGalleryFiles(files) { Array.from(files).forEach(f=>{ const r=new FileReader(); r.onload=e=>{ const idx=_gallery.length; _gallery.push(e.target.result); addGalleryThumb(e.target.result,idx); }; r.readAsDataURL(f); }); }
-function addGalleryThumb(src,idx) { const d=document.createElement('div'); d.className='gthumb'; d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button>`; document.getElementById('gallery-thumbs').appendChild(d); }
+function handleGalleryFiles(files) {
+  clearUploadErr('gallery-upload-err');
+  const errs=[];
+  Array.from(files).forEach(f=>{
+    if (!f.type.startsWith('image/')) { errs.push(`"${f.name}": formato non supportato (usa JPG, PNG, WebP).`); return; }
+    if (f.size > 5*1024*1024) { errs.push(`"${f.name}": supera il limite di 5 MB.`); return; }
+    const r=new FileReader();
+    r.onerror=()=>errs.push(`"${f.name}": errore durante la lettura.`);
+    r.onload=e=>{ const idx=_gallery.length; const item={src:e.target.result,caption:''}; _gallery.push(item); addGalleryThumb(item,idx); };
+    r.readAsDataURL(f);
+  });
+  if (errs.length) showUploadErr('gallery-upload-err', errs.join(' '));
+}
+function addGalleryThumb(item, idx) {
+  const src = typeof item==='object' ? item.src : item;
+  const cap = typeof item==='object' ? (item.caption||'') : '';
+  const d=document.createElement('div'); d.className='gthumb'; d.dataset.idx=idx;
+  d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button><input class="gcaption" type="text" placeholder="Didascalia..." value="${esc(cap)}" />`;
+  document.getElementById('gallery-thumbs').appendChild(d);
+}
 function removeThumb(btn,idx) { _gallery[idx]=null; btn.closest('.gthumb').remove(); }
 
 let _oc=0;
