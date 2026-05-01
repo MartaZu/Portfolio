@@ -217,6 +217,14 @@
     .portrait-edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; border-radius: 18px; cursor: pointer; }
     .admin-active .portrait-edit-overlay { display: flex; }
     .portrait-edit-btn { background: #fff; color: var(--ink); border: none; border-radius: 9999px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--font); pointer-events: none; }
+    .skill-del { display: none; border: none; background: none; color: inherit; cursor: pointer; margin-left: 5px; font-size: 12px; opacity: 0.55; padding: 0; line-height: 1; vertical-align: middle; font-family: var(--font); }
+    .admin-active .skill-del { display: inline; }
+    .skill-add-btn { display: none; font-size: 13px; color: var(--blue); background: rgba(0,102,204,0.07); border: 1.5px dashed var(--blue); border-radius: 9999px; padding: 6px 14px; cursor: pointer; font-family: var(--font); transition: background 0.15s; }
+    .admin-active .skill-add-btn { display: inline-flex; align-items: center; gap: 4px; }
+    .skill-add-btn:hover { background: rgba(0,102,204,0.15); }
+    #skill-suggestions { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; min-height: 20px; }
+    .skill-sug-btn { font-size: 12px; color: var(--ink-80); background: var(--parchment); border: 1px solid var(--hairline); border-radius: 9999px; padding: 4px 12px; cursor: pointer; font-family: var(--font); transition: background 0.15s, color 0.15s, border-color 0.15s; }
+    .skill-sug-btn:hover { background: rgba(0,102,204,0.08); color: var(--blue); border-color: var(--blue); }
     .fab-btn:disabled { opacity: 0.6; cursor: wait; transform: none !important; }
     @keyframes fab-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
     .fab-btn.loading { animation: fab-pulse 1s ease-in-out infinite; }
@@ -382,7 +390,7 @@
           <div class="tl-item"><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><p class="tl-period" data-ce-key="tl-period-3">2018 — 2019</p><p class="tl-role" data-ce-key="tl-role-3">Researcher &amp; Service Designer</p><p class="tl-company" data-ce-key="tl-company-3">Ideatech, Lecco</p><p class="tl-desc" data-ce-key="tl-desc-3">Research on Agile methodologies and effort estimation. Redesigned internal processes to establish a continuous improvement system.</p></div></div>
         </div>
         <div>
-          <div class="cv-block"><p class="cv-sub-h">Skills</p><div class="skills-grid" data-ce-key="skills-grid"><span class="skill-pill">Service Design</span><span class="skill-pill">Strategic Design</span><span class="skill-pill">Business Design</span><span class="skill-pill">Product Discovery</span><span class="skill-pill">User Research</span><span class="skill-pill">Prototyping</span><span class="skill-pill">Workshop Facilitation</span><span class="skill-pill">Brand Identity</span><span class="skill-pill">Business Modelling</span><span class="skill-pill">MVP Design</span><span class="skill-pill">Figma</span><span class="skill-pill">Miro</span><span class="skill-pill">AI-assisted Design</span></div></div>
+          <div class="cv-block"><p class="cv-sub-h">Skills</p><div class="skills-grid" id="skills-grid"></div></div>
           <div class="cv-block"><p class="cv-sub-h">Education</p>
             <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-0">Double MSc · Product Service System Design + Management Engineering</p><p class="edu-sch" data-ce-key="edu-sch-0">Politecnico di Milano · 2019</p></div>
             <div class="edu-item"><p class="edu-deg" data-ce-key="edu-deg-1">MITdesignX · Designing High-Impact Solutions</p><p class="edu-sch" data-ce-key="edu-sch-1">Massachusetts Institute of Technology · 2023</p></div>
@@ -466,6 +474,20 @@
     <div class="m-actions">
       <button class="btn-sec" onclick="closePwdModal()">Annulla</button>
       <button class="btn-pri" onclick="checkPwd()">Accedi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SKILL ADD MODAL ── -->
+<div class="modal-overlay" id="skill-add-overlay">
+  <div class="modal-box">
+    <p class="modal-title">Aggiungi skill</p>
+    <p class="modal-sub">Digita una nuova skill o scegli dai tag dei tuoi progetti.</p>
+    <input class="m-input" id="skill-add-input" placeholder="Es. Design Systems" onkeydown="if(event.key==='Enter')confirmAddSkill()" />
+    <div id="skill-suggestions"></div>
+    <div class="m-actions">
+      <button class="btn-sec" onclick="closeSkillAdd()">Annulla</button>
+      <button class="btn-pri" onclick="confirmAddSkill()">Aggiungi</button>
     </div>
   </div>
 </div>
@@ -561,6 +583,14 @@ function getProjects() {
   catch(e) { return DEFAULTS; }
 }
 function saveProjects(p) { localStorage.setItem(SK,JSON.stringify(p)); }
+
+const SK_SKILLS = 'portfolio_skills_v1';
+const SKILLS = /*SKILLS-BEGIN*/["Service Design","Strategic Design","Business Design","Product Discovery","User Research","Prototyping","Workshop Facilitation","Brand Identity","Business Modelling","MVP Design","Figma","Miro","AI-assisted Design"]/*SKILLS-END*/;
+function getSkills() {
+  try { const d=localStorage.getItem(SK_SKILLS); if(d) return JSON.parse(d); } catch(e) {}
+  return [...SKILLS];
+}
+function saveSkillsLocal(s) { localStorage.setItem(SK_SKILLS, JSON.stringify(s)); }
 
 // ── ROUTING ───────────────────────────────────────────────────────────────────
 function showProject(id) {
@@ -821,6 +851,13 @@ function replaceDefaultsBlock(htmlStr, projects) {
   );
 }
 
+function replaceSkillsBlock(htmlStr, skills) {
+  return htmlStr.replace(
+    /\/\*SKILLS-BEGIN\*\/[\s\S]*?\/\*SKILLS-END\*\//,
+    `/*SKILLS-BEGIN*/${JSON.stringify(skills)}/*SKILLS-END*/`
+  );
+}
+
 // ── PORTRAIT ──────────────────────────────────────────────────────────────────
 let _pendingPortraitFile = null;
 
@@ -903,9 +940,10 @@ async function saveContent() {
     }
     saveProjects(projects);
 
-    // 4. Apply text edits and update DEFAULTS
+    // 4. Apply text edits, update DEFAULTS and SKILLS
     html = applyTextChanges(html);
     html = replaceDefaultsBlock(html, projects);
+    html = replaceSkillsBlock(html, getSkills());
 
     // 5. Commit index.html
     await ghPutFile('index.html', strToB64(html), indexSha, 'content: update portfolio via admin');
@@ -937,6 +975,38 @@ function deleteProject(id) {
   if (!confirm('Eliminare questo progetto?')) return;
   saveProjects(getProjects().filter(p=>p.id!==id));
   renderGrid();
+}
+
+// ── SKILLS ────────────────────────────────────────────────────────────────────
+function renderSkills() {
+  const skills = getSkills();
+  const grid = document.getElementById('skills-grid');
+  if (!grid) return;
+  grid.innerHTML = skills.map((s,i) =>
+    `<span class="skill-pill">${esc(s)}<button class="skill-del" onclick="removeSkill(${i})" title="Rimuovi">×</button></span>`
+  ).join('') + `<button class="skill-add-btn" onclick="openSkillAdd()">+ Aggiungi</button>`;
+}
+function removeSkill(i) {
+  const s = getSkills(); s.splice(i,1); saveSkillsLocal(s); renderSkills();
+}
+function openSkillAdd() {
+  const current = new Set(getSkills());
+  const suggestions = [...new Set(getProjects().flatMap(p=>p.tags||[]))].filter(t=>!current.has(t)).sort();
+  document.getElementById('skill-suggestions').innerHTML = suggestions.length
+    ? suggestions.map(t=>`<button class="skill-sug-btn" data-s="${esc(t)}" onclick="pickSkillSug(this)">${esc(t)}</button>`).join('')
+    : '<span style="font-size:12px;color:var(--ink-48)">Nessun tag disponibile dai progetti</span>';
+  document.getElementById('skill-add-input').value='';
+  document.getElementById('skill-add-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('skill-add-input').focus(),100);
+}
+function closeSkillAdd() { document.getElementById('skill-add-overlay').classList.remove('open'); }
+function pickSkillSug(btn) { document.getElementById('skill-add-input').value=btn.dataset.s; }
+function confirmAddSkill() {
+  const val = document.getElementById('skill-add-input').value.trim();
+  if (!val) return;
+  const s = getSkills();
+  if (!s.includes(val)) { s.push(val); saveSkillsLocal(s); renderSkills(); }
+  closeSkillAdd();
 }
 
 // ── FORM ──────────────────────────────────────────────────────────────────────
@@ -1055,6 +1125,7 @@ function setTw(k,v){ tw[k]=v; applyTw(); window.parent.postMessage({type:'__edit
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderGrid();
+renderSkills();
 loadContent();
 </script>
 
