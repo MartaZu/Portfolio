@@ -605,28 +605,38 @@ function getSkills() {
 function saveSkillsLocal(s) { localStorage.setItem(SK_SKILLS, JSON.stringify(s)); }
 
 // ── ROUTING ───────────────────────────────────────────────────────────────────
-function showProject(id) {
+function showProject(id, push) {
   const projects = getProjects();
   const p = projects.find(x=>x.id===id);
   if (!p) return;
   renderProjectDetail(p, projects);
   document.body.classList.add('show-project');
   document.getElementById('main-nav').classList.add('project-view');
-  document.querySelector('.nav-home-links') && document.querySelectorAll('.nav-home-links').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.nav-home-links').forEach(el=>el.style.display='none');
   document.getElementById('nav-back').style.display='flex';
   document.getElementById('nav-name-project').textContent = p.client||p.title;
   document.getElementById('nav-name-project').style.display='block';
   window.scrollTo({top:0,behavior:'instant'});
+  if (push !== false) history.pushState({projectId:id}, '', '#'+id);
 }
 
-function goHome() {
+function goHome(push) {
   document.body.classList.remove('show-project');
   document.getElementById('main-nav').classList.remove('project-view');
   document.querySelectorAll('.nav-home-links').forEach(el=>el.style.display='');
   document.getElementById('nav-back').style.display='none';
   document.getElementById('nav-name-project').style.display='none';
   window.scrollTo({top:0,behavior:'instant'});
+  if (push !== false) history.pushState(null, '', location.pathname);
 }
+
+window.addEventListener('popstate', e => {
+  if (e.state && e.state.projectId) showProject(e.state.projectId, false);
+  else goHome(false);
+});
+
+// deep-link: show project if URL has a hash on load
+(function(){ const id=location.hash.slice(1); if(id){ const p=getProjects().find(x=>x.id===id); if(p) showProject(id,false); } })();
 
 function scrollToSection(id) {
   const el = document.getElementById(id);
