@@ -192,8 +192,10 @@
     .pd-outcome-card { background: var(--parchment); border-radius: 16px; padding: 26px 22px; }
     .pd-outcome-n { font-size: 38px; font-weight: 600; letter-spacing: -0.04em; color: var(--blue); line-height: 1; margin-bottom: 8px; }
     .pd-outcome-l { font-size: 15px; color: var(--ink-80); line-height: 1.4; }
-    .pd-nav-card { background: var(--parchment); border-radius: 18px; padding: 36px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; transition: transform 0.2s; margin-bottom: 40px; }
+    .pd-nav-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 40px; }
+    .pd-nav-card { background: var(--parchment); border-radius: 18px; padding: 36px 40px; display: flex; align-items: center; justify-content: space-between; gap: 24px; cursor: pointer; transition: transform 0.2s; }
     .pd-nav-card:hover { transform: translateY(-3px); }
+    .pd-nav-card.prev { flex-direction: row-reverse; }
     .pd-nav-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); margin-bottom: 8px; }
     .pd-nav-title { font-size: 22px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); }
     .pd-nav-arrow { font-size: 28px; color: var(--blue); flex-shrink: 0; }
@@ -317,7 +319,9 @@
       .nav-links li:not(:last-child) { display: none; }
       .hero, .about, .cv, .work, .contact { padding-left: 20px; padding-right: 20px; }
       .pd-outcomes.o2, .pd-outcomes.o3 { grid-template-columns: 1fr; }
+      .pd-nav-row { grid-template-columns: 1fr; }
       .pd-nav-card { flex-direction: column; align-items: flex-start; padding: 24px; }
+      .pd-nav-card.prev { flex-direction: column; }
       .gallery-thumbs { grid-template-columns: repeat(3,1fr); }
     }
   </style>
@@ -671,6 +675,7 @@ function nl2p(text) {
 function renderProjectDetail(p, all) {
   const sorted = all.slice().sort((a,b)=>(a.order||0)-(b.order||0));
   const idx = sorted.findIndex(x=>x.id===p.id);
+  const prev = sorted[idx-1];
   const next = sorted[idx+1];
 
   const tags = (p.tags||[]).map(t=>`<span class="pd-tag">${esc(t)}</span>`).join('');
@@ -703,7 +708,10 @@ function renderProjectDetail(p, all) {
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
   const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
 
-  const navCard = next
+  const prevCard = prev
+    ? `<div class="pd-nav-card prev" onclick="showProject('${esc(prev.id)}')"><span class="pd-nav-arrow">←</span><div><p class="pd-nav-label">Progetto precedente</p><p class="pd-nav-title">${esc(prev.title)}</p></div></div>`
+    : `<div class="pd-nav-card prev" onclick="goHome()"><span class="pd-nav-arrow">↑</span><div><p class="pd-nav-label">Tutti i progetti</p><p class="pd-nav-title">Torna al portfolio</p></div></div>`;
+  const nextCard = next
     ? `<div class="pd-nav-card" onclick="showProject('${esc(next.id)}')"><div><p class="pd-nav-label">Progetto successivo</p><p class="pd-nav-title">${esc(next.title)}</p></div><span class="pd-nav-arrow">→</span></div>`
     : `<div class="pd-nav-card" onclick="goHome()"><div><p class="pd-nav-label">Tutti i progetti</p><p class="pd-nav-title">Torna al portfolio ↗</p></div><span class="pd-nav-arrow">↑</span></div>`;
 
@@ -723,7 +731,7 @@ function renderProjectDetail(p, all) {
       ${galleryHTML}
       ${outcomesHTML}
       <hr class="pd-divider" />
-      ${navCard}
+      <div class="pd-nav-row">${prevCard}${nextCard}</div>
     </div>`;
 
   // animate
