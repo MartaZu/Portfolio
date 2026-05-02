@@ -337,7 +337,7 @@
     <div class="nav-home-links" style="display:flex;align-items:center;">
       <span class="nav-logo" onclick="goHome()">Marta Zuliani</span>
     </div>
-    <button class="nav-back-btn" id="nav-back" onclick="goHome()">← Tutti i progetti</button>
+    <button class="nav-back-btn" id="nav-back" onclick="goHome()">← All projects</button>
     <ul class="nav-links nav-home-links">
       <li><a onclick="scrollToSection('about')">About</a></li>
       <li><a onclick="scrollToSection('work')">Work</a></li>
@@ -369,7 +369,7 @@
         <img id="portrait-img" src="images/portrait.png?v=1777635995157" alt="Marta Zuliani" />
         <div class="photo-placeholder" id="photo-placeholder"><span class="photo-label">portrait photo</span></div>
         <div class="portrait-edit-overlay" onclick="document.getElementById('portrait-input').click()">
-          <button class="portrait-edit-btn">Carica foto</button>
+          <button class="portrait-edit-btn">Upload photo</button>
         </div>
         <input type="file" id="portrait-input" accept="image/*" style="display:none" onchange="handlePortraitFile(this.files[0])" />
       </div>
@@ -462,18 +462,18 @@
 
 <!-- ── ADMIN FAB ── -->
 <div id="admin-fab">
-  <div class="fab-row"><span class="fab-lbl blue">Aggiungi progetto</span><button class="fab-btn" onclick="openProjectForm()">+</button></div>
-  <div class="fab-row"><span class="fab-lbl blue" id="save-fab-lbl">Salva modifiche</span><button class="fab-btn" onclick="saveContent()" style="font-size:18px;">💾</button></div>
-  <div class="fab-row"><span class="fab-lbl red">Esci da admin</span><button class="fab-btn" style="background:#dc2626;box-shadow:0 4px 20px rgba(220,38,38,.4)" onclick="exitAdmin()">✕</button></div>
+  <div class="fab-row"><span class="fab-lbl blue">Add project</span><button class="fab-btn" onclick="openProjectForm()">+</button></div>
+  <div class="fab-row"><span class="fab-lbl blue" id="save-fab-lbl">Save changes</span><button class="fab-btn" onclick="saveContent()" style="font-size:18px;">💾</button></div>
+  <div class="fab-row"><span class="fab-lbl red">Exit admin</span><button class="fab-btn" style="background:#dc2626;box-shadow:0 4px 20px rgba(220,38,38,.4)" onclick="exitAdmin()">✕</button></div>
 </div>
 
 <!-- ── PASSWORD MODAL ── -->
 <div class="modal-overlay" id="pwd-modal">
   <div class="modal-box">
     <p class="modal-title">Admin access</p>
-    <p class="modal-sub">Inserisci la password per modificare il portfolio.</p>
+    <p class="modal-sub">Enter the password to edit the portfolio.</p>
     <input class="m-input" type="password" id="pwd-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPwd()" />
-    <p class="m-error" id="pwd-err">Password non corretta.</p>
+    <p class="m-error" id="pwd-err">Incorrect password.</p>
     <div style="margin-top:20px;">
       <label style="font-size:13px;font-weight:500;color:var(--ink-80);display:block;margin-bottom:6px;">GitHub Personal Access Token</label>
       <input class="m-input" type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" onkeydown="if(event.key==='Enter')checkPwd()" />
@@ -481,7 +481,7 @@
       <p class="m-error" id="pat-err">Inserisci un GitHub Personal Access Token.</p>
     </div>
     <div class="m-actions">
-      <button class="btn-sec" onclick="closePwdModal()">Annulla</button>
+      <button class="btn-sec" onclick="closePwdModal()">Cancel</button>
       <button class="btn-pri" onclick="checkPwd()">Accedi</button>
     </div>
   </div>
@@ -490,13 +490,13 @@
 <!-- ── SKILL ADD MODAL ── -->
 <div class="modal-overlay" id="skill-add-overlay">
   <div class="modal-box">
-    <p class="modal-title">Aggiungi skill</p>
-    <p class="modal-sub">Digita una nuova skill o scegli dai tag dei tuoi progetti.</p>
-    <input class="m-input" id="skill-add-input" placeholder="Es. Design Systems" onkeydown="if(event.key==='Enter')confirmAddSkill()" />
+    <p class="modal-title">Add skill</p>
+    <p class="modal-sub">Type a new skill or pick from your project tags.</p>
+    <input class="m-input" id="skill-add-input" placeholder="E.g. Design Systems" onkeydown="if(event.key==='Enter')confirmAddSkill()" />
     <div id="skill-suggestions"></div>
     <div class="m-actions">
-      <button class="btn-sec" onclick="closeSkillAdd()">Annulla</button>
-      <button class="btn-pri" onclick="confirmAddSkill()">Aggiungi</button>
+      <button class="btn-sec" onclick="closeSkillAdd()">Cancel</button>
+      <button class="btn-pri" onclick="confirmAddSkill()">Add</button>
     </div>
   </div>
 </div>
@@ -511,18 +511,18 @@
     <div class="pf-body">
       <input type="hidden" id="pf-id" />
       <div>
-        <p class="pf-sec-ttl">Informazioni base</p>
+        <p class="pf-sec-ttl">Basic info</p>
         <div style="display:flex;flex-direction:column;gap:12px;">
-          <div class="pf-field"><label class="pf-lbl">Titolo *</label><input class="pf-in" id="pf-title" placeholder="Es. FTV Monitoring — Photovoltaic Plant Intelligence" /></div>
-          <div class="pf-field"><label class="pf-lbl">Sottotitolo *</label><input class="pf-in" id="pf-subtitle" placeholder="Breve descrizione del progetto" /></div>
+          <div class="pf-field"><label class="pf-lbl">Title *</label><input class="pf-in" id="pf-title" placeholder="E.g. FTV Monitoring — Photovoltaic Plant Intelligence" /></div>
+          <div class="pf-field"><label class="pf-lbl">Subtitle *</label><input class="pf-in" id="pf-subtitle" placeholder="Brief project description" /></div>
           <div class="pf-grid2">
-            <div class="pf-field"><label class="pf-lbl">Cliente</label><input class="pf-in" id="pf-client" placeholder="Es. A2A Digital Hub" /></div>
-            <div class="pf-field"><label class="pf-lbl">Anno</label><input class="pf-in" id="pf-year" placeholder="Es. 2025" /></div>
-            <div class="pf-field"><label class="pf-lbl">Ruolo</label><input class="pf-in" id="pf-role" placeholder="Es. Lead Product Designer" /></div>
-            <div class="pf-field"><label class="pf-lbl">Durata</label><input class="pf-in" id="pf-duration" placeholder="Es. 6 mesi" /></div>
+            <div class="pf-field"><label class="pf-lbl">Client</label><input class="pf-in" id="pf-client" placeholder="E.g. A2A Digital Hub" /></div>
+            <div class="pf-field"><label class="pf-lbl">Year</label><input class="pf-in" id="pf-year" placeholder="E.g. 2025" /></div>
+            <div class="pf-field"><label class="pf-lbl">Role</label><input class="pf-in" id="pf-role" placeholder="E.g. Lead Product Designer" /></div>
+            <div class="pf-field"><label class="pf-lbl">Duration</label><input class="pf-in" id="pf-duration" placeholder="E.g. 6 months" /></div>
           </div>
-          <div class="pf-field"><label class="pf-lbl">Team</label><input class="pf-in" id="pf-team" placeholder="Es. 1 designer, 4 developer" /></div>
-          <div class="pf-field"><label class="pf-lbl">Tag (separati da virgola)</label><input class="pf-in" id="pf-tags" placeholder="Es. Energy, Product Design, B2B" /></div>
+          <div class="pf-field"><label class="pf-lbl">Team</label><input class="pf-in" id="pf-team" placeholder="E.g. 1 designer, 4 developers" /></div>
+          <div class="pf-field"><label class="pf-lbl">Tags (comma-separated)</label><input class="pf-in" id="pf-tags" placeholder="E.g. Energy, Product Design, B2B" /></div>
         </div>
       </div>
       <div>
@@ -530,10 +530,10 @@
         <div class="cover-drop" id="cover-drop">
           <input type="file" accept="image/*" onchange="handleCoverFile(this.files[0])" />
           <img id="cover-preview-img" class="cover-preview-img" alt="" />
-          <div id="cover-ph"><div class="up-icon">⬆</div><p class="up-hint"><strong>Clicca o trascina</strong> un'immagine</p><p class="up-hint" style="font-size:12px;margin-top:4px;">Formato consigliato: <strong>1600 × 800 px</strong> · 16:8 · JPG o PNG · max 5 MB</p></div>
+          <div id="cover-ph"><div class="up-icon">⬆</div><p class="up-hint"><strong>Click or drag</strong> an image</p><p class="up-hint" style="font-size:12px;margin-top:4px;">Recommended: <strong>1600 × 800 px</strong> · 16:8 · JPG or PNG · max 5 MB</p></div>
         </div>
         <p id="cover-upload-err" class="upload-err"></p>
-        <p style="font-size:13px;color:var(--ink-48);margin-top:10px;">Oppure scegli un gradiente:</p>
+        <p style="font-size:13px;color:var(--ink-48);margin-top:10px;">Or choose a gradient:</p>
         <div class="grad-presets" id="grad-presets">
           <div class="grad-preset active" style="background:linear-gradient(135deg,#0a2a14,#1a8f4a)" data-g="linear-gradient(135deg,#0a2a14 0%,#0d5c2a 45%,#1a8f4a 100%)"></div>
           <div class="grad-preset" style="background:linear-gradient(135deg,#0a1a3d,#2a5ab8)" data-g="linear-gradient(135deg,#0a1a3d 0%,#1a3a7a 50%,#2a5ab8 100%)"></div>
@@ -546,40 +546,40 @@
         </div>
       </div>
       <div>
-        <p class="pf-sec-ttl">Storia del progetto</p>
+        <p class="pf-sec-ttl">Project story</p>
         <div style="display:flex;flex-direction:column;gap:12px;">
-          <div class="pf-field"><label class="pf-lbl">Challenge</label><textarea class="pf-ta tall" id="pf-challenge" placeholder="Qual era il problema da risolvere?"></textarea></div>
-          <div class="pf-field"><label class="pf-lbl">Approccio</label><textarea class="pf-ta tall" id="pf-approach" placeholder="Come hai affrontato il problema?"></textarea></div>
-          <div class="pf-field"><label class="pf-lbl">Soluzione</label><textarea class="pf-ta tall" id="pf-solution" placeholder="Cosa hai progettato?"></textarea></div>
+          <div class="pf-field"><label class="pf-lbl">Challenge</label><textarea class="pf-ta tall" id="pf-challenge" placeholder="What was the problem to solve?"></textarea></div>
+          <div class="pf-field"><label class="pf-lbl">Approach</label><textarea class="pf-ta tall" id="pf-approach" placeholder="How did you tackle the problem?"></textarea></div>
+          <div class="pf-field"><label class="pf-lbl">Solution</label><textarea class="pf-ta tall" id="pf-solution" placeholder="What did you design?"></textarea></div>
         </div>
       </div>
       <div>
-        <p class="pf-sec-ttl">Risultati (fino a 3)</p>
+        <p class="pf-sec-ttl">Results (up to 3)</p>
         <div class="outcome-rows" id="outcome-rows"></div>
-        <button class="outcome-add-btn" id="outcome-add" onclick="addOutcomeRow()">+ Aggiungi risultato</button>
+        <button class="outcome-add-btn" id="outcome-add" onclick="addOutcomeRow()">+ Add result</button>
       </div>
       <div>
-        <p class="pf-sec-ttl">Galleria immagini</p>
+        <p class="pf-sec-ttl">Image gallery</p>
         <div class="gallery-drop">
           <input type="file" accept="image/*" multiple onchange="handleGalleryFiles(this.files)" />
           <div class="up-icon">⬆</div>
-          <p class="up-hint"><strong>Clicca o trascina</strong> più immagini</p>
-          <p class="up-hint" style="font-size:12px;margin-top:4px;">Formato consigliato: <strong>1200 × 900 px</strong> · 4:3 · JPG o PNG · max 5 MB</p>
+          <p class="up-hint"><strong>Click or drag</strong> multiple images</p>
+          <p class="up-hint" style="font-size:12px;margin-top:4px;">Recommended: <strong>1200 × 900 px</strong> · 4:3 · JPG or PNG · max 5 MB</p>
         </div>
         <p id="gallery-upload-err" class="upload-err"></p>
         <div class="gallery-thumbs" id="gallery-thumbs"></div>
       </div>
       <div>
-        <p class="pf-sec-ttl">Impostazioni</p>
+        <p class="pf-sec-ttl">Settings</p>
         <div style="display:flex;flex-direction:column;gap:12px;">
-          <div class="toggle-row"><label class="toggle-sw"><input type="checkbox" id="pf-featured" /><span class="toggle-sl"></span></label><span class="toggle-lbl">Progetto in evidenza (larghezza doppia)</span></div>
-          <div class="pf-field"><label class="pf-lbl">Link esterno (opzionale)</label><input class="pf-in" id="pf-ext-link" placeholder="https://..." /></div>
+          <div class="toggle-row"><label class="toggle-sw"><input type="checkbox" id="pf-featured" /><span class="toggle-sl"></span></label><span class="toggle-lbl">Featured project (double width)</span></div>
+          <div class="pf-field"><label class="pf-lbl">External link (optional)</label><input class="pf-in" id="pf-ext-link" placeholder="https://..." /></div>
         </div>
       </div>
     </div>
     <div class="pf-footer">
-      <button class="pf-cancel-btn" onclick="closeProjectForm()">Annulla</button>
-      <button class="pf-save-btn" onclick="saveProjectForm()">Salva progetto</button>
+      <button class="pf-cancel-btn" onclick="closeProjectForm()">Cancel</button>
+      <button class="pf-save-btn" onclick="saveProjectForm()">Save project</button>
     </div>
   </div>
 </div>
@@ -693,8 +693,8 @@ function renderProjectDetail(p, all) {
 
   const tags = (p.tags||[]).map(t=>`<span class="pd-tag">${esc(t)}</span>`).join('');
   const metas = [
-    {l:'Cliente',v:p.client},{l:'Ruolo',v:p.role},
-    {l:'Periodo',v:p.duration||p.year},{l:'Team',v:p.team}
+    {l:'Client',v:p.client},{l:'Role',v:p.role},
+    {l:'Period',v:p.duration||p.year},{l:'Team',v:p.team}
   ].filter(m=>m.v).map(m=>`<div class="pd-meta-col"><span class="pd-meta-lbl">${esc(m.l)}</span><span class="pd-meta-val">${esc(m.v)}</span></div>`).join('');
 
   const cover = p.coverImage
@@ -702,9 +702,9 @@ function renderProjectDetail(p, all) {
     : `<div class="pd-cover" style="background:${p.coverGradient}"><span class="pd-cover-label">${esc(p.client||p.title)}</span></div>`;
 
   const stories = [
-    {k:'Challenge',kk:'Il problema',t:p.challenge},
-    {k:'Approccio',kk:'Il metodo',t:p.approach},
-    {k:'Soluzione',kk:'Il risultato',t:p.solution}
+    {k:'Challenge',kk:'The challenge',t:p.challenge},
+    {k:'Approach',kk:'The method',t:p.approach},
+    {k:'Solution',kk:'The outcome',t:p.solution}
   ].filter(s=>s.t);
 
   let storyHTML = '';
@@ -724,11 +724,11 @@ function renderProjectDetail(p, all) {
   const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
 
   const prevCard = prev
-    ? `<div class="pd-nav-card prev" onclick="showProject('${esc(prev.id)}')"><span class="pd-nav-arrow">←</span><div><p class="pd-nav-label">Progetto precedente</p><p class="pd-nav-title">${esc(prev.title)}</p></div></div>`
-    : `<div class="pd-nav-card prev" onclick="goHome()"><span class="pd-nav-arrow">↑</span><div><p class="pd-nav-label">Tutti i progetti</p><p class="pd-nav-title">Torna al portfolio</p></div></div>`;
+    ? `<div class="pd-nav-card prev" onclick="showProject('${esc(prev.id)}')"><span class="pd-nav-arrow">←</span><div><p class="pd-nav-label">Previous project</p><p class="pd-nav-title">${esc(prev.title)}</p></div></div>`
+    : `<div class="pd-nav-card prev" onclick="goHome()"><span class="pd-nav-arrow">↑</span><div><p class="pd-nav-label">All projects</p><p class="pd-nav-title">Back to portfolio</p></div></div>`;
   const nextCard = next
-    ? `<div class="pd-nav-card" onclick="showProject('${esc(next.id)}')"><div><p class="pd-nav-label">Progetto successivo</p><p class="pd-nav-title">${esc(next.title)}</p></div><span class="pd-nav-arrow">→</span></div>`
-    : `<div class="pd-nav-card" onclick="goHome()"><div><p class="pd-nav-label">Tutti i progetti</p><p class="pd-nav-title">Torna al portfolio ↗</p></div><span class="pd-nav-arrow">↑</span></div>`;
+    ? `<div class="pd-nav-card" onclick="showProject('${esc(next.id)}')"><div><p class="pd-nav-label">Next project</p><p class="pd-nav-title">${esc(next.title)}</p></div><span class="pd-nav-arrow">→</span></div>`
+    : `<div class="pd-nav-card" onclick="goHome()"><div><p class="pd-nav-label">All projects</p><p class="pd-nav-title">Back to portfolio ↗</p></div><span class="pd-nav-arrow">↑</span></div>`;
 
   document.getElementById('pd-content').innerHTML = `
     <section class="pd-hero">
@@ -924,7 +924,7 @@ function handlePortraitFile(file) {
 // ── SAVE TO GITHUB ────────────────────────────────────────────────────────────
 async function saveContent() {
   const pat = sessionStorage.getItem(PAT_KEY);
-  if (!pat) { showToast('Nessun token — esci e rientra in admin.', 'err'); return; }
+  if (!pat) { showToast('No token — exit and re-enter admin.', 'err'); return; }
 
   setSaveLoading(true);
   try {
@@ -938,7 +938,7 @@ async function saveContent() {
     // 2. Upload portrait if new file selected
     if (_pendingPortraitFile) {
       const MAX = 5*1024*1024;
-      if (_pendingPortraitFile.size > MAX) throw new Error('Immagine troppo grande (max 5 MB)');
+      if (_pendingPortraitFile.size > MAX) throw new Error('Image too large (max 5 MB)');
       const ext = (_pendingPortraitFile.name.split('.').pop()||'jpg').toLowerCase();
       const path = `images/portrait.${ext}`;
       const b64 = await fileToB64(_pendingPortraitFile);
@@ -989,10 +989,10 @@ async function saveContent() {
     // 5. Commit index.html
     await ghPutFile('index.html', strToB64(html), indexSha, 'content: update portfolio via admin');
 
-    showToast('Pubblicato su GitHub ✓ (live in ~1 min)', 'ok');
+    showToast('Published to GitHub ✓ (live in ~1 min)', 'ok');
   } catch(err) {
     console.error(err);
-    showToast('Errore: ' + err.message, 'err');
+    showToast('Error: ' + err.message, 'err');
   } finally {
     setSaveLoading(false);
   }
@@ -1003,7 +1003,7 @@ function setSaveLoading(on) {
   const lbl = document.getElementById('save-fab-lbl');
   btn.disabled = on;
   btn.classList.toggle('loading', on);
-  lbl.textContent = on ? 'Salvataggio...' : 'Salva modifiche';
+  lbl.textContent = on ? 'Saving...' : 'Save changes';
 }
 function showToast(msg, type) {
   const t = document.getElementById('save-toast');
@@ -1013,7 +1013,7 @@ function showToast(msg, type) {
   t._t = setTimeout(() => t.className = '', 5000);
 }
 function deleteProject(id) {
-  if (!confirm('Eliminare questo progetto?')) return;
+  if (!confirm('Delete this project?')) return;
   saveProjects(getProjects().filter(p=>p.id!==id));
   renderGrid();
 }
@@ -1025,7 +1025,7 @@ function renderSkills() {
   if (!grid) return;
   grid.innerHTML = skills.map((s,i) =>
     `<span class="skill-pill">${esc(s)}<button class="skill-del" onclick="removeSkill(${i})" title="Rimuovi">×</button></span>`
-  ).join('') + `<button class="skill-add-btn" onclick="openSkillAdd()">+ Aggiungi</button>`;
+  ).join('') + `<button class="skill-add-btn" onclick="openSkillAdd()">+ Add</button>`;
 }
 function removeSkill(i) {
   const s = getSkills(); s.splice(i,1); saveSkillsLocal(s); renderSkills();
@@ -1035,7 +1035,7 @@ function openSkillAdd() {
   const suggestions = [...new Set(getProjects().flatMap(p=>p.tags||[]))].filter(t=>!current.has(t)).sort();
   document.getElementById('skill-suggestions').innerHTML = suggestions.length
     ? suggestions.map(t=>`<button class="skill-sug-btn" data-s="${esc(t)}" onclick="pickSkillSug(this)">${esc(t)}</button>`).join('')
-    : '<span style="font-size:12px;color:var(--ink-48)">Nessun tag disponibile dai progetti</span>';
+    : '<span style="font-size:12px;color:var(--ink-48)">No tags available from projects</span>';
   document.getElementById('skill-add-input').value='';
   document.getElementById('skill-add-overlay').classList.add('open');
   setTimeout(()=>document.getElementById('skill-add-input').focus(),100);
@@ -1060,7 +1060,7 @@ function openProjectForm(id) {
   document.getElementById('cover-preview-img').style.display='none';
   document.getElementById('cover-ph').style.display='block';
   document.getElementById('pf-id').value=id||'';
-  document.getElementById('pf-form-title').textContent=id?'Modifica progetto':'Nuovo progetto';
+  document.getElementById('pf-form-title').textContent=id?'Edit project':'New project';
 
   if (id) {
     const p=getProjects().find(x=>x.id===id);
@@ -1097,7 +1097,7 @@ function closeProjectForm() { document.getElementById('pf-overlay').classList.re
 
 function saveProjectForm() {
   const title=document.getElementById('pf-title').value.trim();
-  if (!title) { alert('Il titolo è obbligatorio.'); return; }
+  if (!title) { alert('Title is required.'); return; }
   const editId=document.getElementById('pf-id').value;
   const projects=getProjects();
   const newId=editId||'proj-'+Date.now();
@@ -1129,10 +1129,10 @@ function clearUploadErr(id) { const el=document.getElementById(id); if(el){el.te
 function handleCoverFile(file) {
   clearUploadErr('cover-upload-err');
   if (!file) return;
-  if (!file.type.startsWith('image/')) { showUploadErr('cover-upload-err','Formato non supportato: usa JPG, PNG o WebP.'); return; }
-  if (file.size > 5*1024*1024) { showUploadErr('cover-upload-err','File troppo grande: il limite è 5 MB.'); return; }
+  if (!file.type.startsWith('image/')) { showUploadErr('cover-upload-err','Unsupported format: use JPG, PNG or WebP.'); return; }
+  if (file.size > 5*1024*1024) { showUploadErr('cover-upload-err','File too large: the limit is 5 MB.'); return; }
   const r=new FileReader();
-  r.onerror=()=>showUploadErr('cover-upload-err','Errore durante la lettura del file.');
+  r.onerror=()=>showUploadErr('cover-upload-err','Error reading the file.');
   r.onload=e=>{ _cover=e.target.result; document.getElementById('cover-preview-img').src=e.target.result; document.getElementById('cover-preview-img').style.display='block'; document.getElementById('cover-ph').style.display='none'; };
   r.readAsDataURL(file);
 }
@@ -1143,10 +1143,10 @@ function handleGalleryFiles(files) {
   clearUploadErr('gallery-upload-err');
   const errs=[];
   Array.from(files).forEach(f=>{
-    if (!f.type.startsWith('image/')) { errs.push(`"${f.name}": formato non supportato (usa JPG, PNG, WebP).`); return; }
-    if (f.size > 5*1024*1024) { errs.push(`"${f.name}": supera il limite di 5 MB.`); return; }
+    if (!f.type.startsWith('image/')) { errs.push(`"${f.name}": unsupported format (use JPG, PNG, WebP).`); return; }
+    if (f.size > 5*1024*1024) { errs.push(`"${f.name}": exceeds the 5 MB limit.`); return; }
     const r=new FileReader();
-    r.onerror=()=>errs.push(`"${f.name}": errore durante la lettura.`);
+    r.onerror=()=>errs.push(`"${f.name}": error reading file.`);
     r.onload=e=>{ const idx=_gallery.length; const item={src:e.target.result,caption:''}; _gallery.push(item); addGalleryThumb(item,idx); };
     r.readAsDataURL(f);
   });
@@ -1156,7 +1156,7 @@ function addGalleryThumb(item, idx) {
   const src = typeof item==='object' ? item.src : item;
   const cap = typeof item==='object' ? (item.caption||'') : '';
   const d=document.createElement('div'); d.className='gthumb'; d.dataset.idx=idx;
-  d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button><input class="gcaption" type="text" placeholder="Didascalia..." value="${esc(cap)}" />`;
+  d.innerHTML=`<img src="${src}"/><button class="gthumb-del" onclick="removeThumb(this,${idx})">✕</button><input class="gcaption" type="text" placeholder="Caption..." value="${esc(cap)}" />`;
   document.getElementById('gallery-thumbs').appendChild(d);
 }
 function removeThumb(btn,idx) { _gallery[idx]=null; btn.closest('.gthumb').remove(); }
@@ -1165,7 +1165,7 @@ let _oc=0;
 function addOutcomeRow(n='',l='') {
   if(_oc>=3) return; _oc++;
   const row=document.createElement('div'); row.className='outcome-row';
-  row.innerHTML=`<input class="pf-in on-input" placeholder="Es. 38%" value="${esc(n)}" /><input class="pf-in ol-input" placeholder="Descrizione" value="${esc(l)}" /><button class="outcome-del-btn" onclick="removeOutcomeRow(this)">✕</button>`;
+  row.innerHTML=`<input class="pf-in on-input" placeholder="E.g. 38%" value="${esc(n)}" /><input class="pf-in ol-input" placeholder="Description" value="${esc(l)}" /><button class="outcome-del-btn" onclick="removeOutcomeRow(this)">✕</button>`;
   document.getElementById('outcome-rows').appendChild(row);
   if(_oc>=3) document.getElementById('outcome-add').style.display='none';
 }
