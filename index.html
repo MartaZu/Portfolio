@@ -736,7 +736,7 @@ function renderProjectDetail(p, all) {
   const galleryHTML = galleryItems.length ? `<div class="pd-gallery"><div class="pd-gallery-wrap">${galBtns}<div class="pd-gallery-scroll">${galItems}</div></div></div>` : '';
 
   const stats = (p.outcomeStats||[]).filter(s=>s.number||s.label);
-  const outcomesHTML = stats.length ? `<div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
+  const outcomesHTML = stats.length ? `<div class="pd-full-col" style="margin-bottom:0"><p class="pd-kicker">Impact</p><h2 class="pd-h2">Results</h2></div><div class="pd-outcomes ${'o'+Math.min(stats.length,3)}">${stats.map(s=>`<div class="pd-outcome-card"><p class="pd-outcome-n">${esc(s.number)}</p><p class="pd-outcome-l">${esc(s.label)}</p></div>`).join('')}</div>` : '';
 
   const prevCard = prev
     ? `<div class="pd-nav-card prev" onclick="showProject('${esc(prev.id)}')"><span class="pd-nav-arrow">←</span><div><p class="pd-nav-label">Previous project</p><p class="pd-nav-title">${esc(prev.title)}</p></div></div>`
