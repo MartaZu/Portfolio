@@ -161,7 +161,9 @@
     .pd-tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
     .pd-tag { font-size: 12px; font-weight: 500; color: var(--blue); background: rgba(0,102,204,0.07); border-radius: 9999px; padding: 5px 12px; }
     .pd-title { font-size: clamp(30px, 5vw, 58px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.06; color: var(--ink); margin-bottom: 18px; }
-    .pd-subtitle { font-size: clamp(16px, 2.5vw, 21px); font-weight: 300; color: var(--ink-48); line-height: 1.45; max-width: 700px; margin-bottom: 44px; }
+    .pd-subtitle { font-size: clamp(16px, 2.5vw, 21px); font-weight: 300; color: var(--ink-48); line-height: 1.45; max-width: 700px; margin-bottom: 24px; }
+    .pd-ext-link { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 32px; padding: 10px 20px; border-radius: 100px; border: 1.5px solid var(--hairline); font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: none; transition: border-color 0.15s, background 0.15s; }
+    .pd-ext-link:hover { border-color: var(--blue); color: var(--blue); background: rgba(0,80,200,0.04); }
     .pd-meta-bar { display: flex; flex-wrap: wrap; gap: 36px; padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); margin-bottom: 56px; }
     .pd-meta-col { display: flex; flex-direction: column; gap: 4px; }
     .pd-meta-lbl { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-48); }
@@ -752,6 +754,7 @@ function renderProjectDetail(p, all) {
         <div class="pd-tag-row">${tags}</div>
         <h1 class="pd-title">${esc(p.title)}</h1>
         <p class="pd-subtitle">${esc(p.subtitle)}</p>
+        ${p.extLink ? `<a class="pd-ext-link" href="${esc(p.extLink)}" target="_blank" rel="noopener">View project ↗</a>` : ''}
         <div class="pd-meta-bar">${metas}</div>
       </div>
     </section>
