@@ -129,6 +129,21 @@
     .adm-btn.del { background: rgba(200,40,40,0.75); }
     .adm-btn.del:hover { background: rgba(200,40,40,0.95); }
 
+    /* ── OTHER PROJECTS ── */
+    .other-work { background: var(--canvas); padding: 0 32px 100px; }
+    .other-work-inner { max-width: 1080px; margin: 0 auto; }
+    .other-work-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; border-top: 1px solid var(--hairline); padding-top: 64px; }
+    .other-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .other-card { border-radius: 16px; overflow: hidden; background: var(--parchment); display: flex; flex-direction: column; position: relative; }
+    .other-card-cover { aspect-ratio: 4/3; overflow: hidden; background: var(--hairline); }
+    .other-card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .other-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .other-card-meta { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-48); }
+    .other-card-title { font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: -0.2px; line-height: 1.25; }
+    .other-card-desc { font-size: 13px; color: var(--ink-80); line-height: 1.5; margin-top: 2px; }
+    .other-card .card-admin-btns { display: none; }
+    .admin-active .other-card .card-admin-btns { display: flex; }
+
     /* ── CONTACT ── */
     .contact { background: var(--tile-2); padding: 120px 32px; text-align: center; }
     .contact-inner { max-width: 640px; margin: 0 auto; }
@@ -329,6 +344,7 @@
       .pd-outcomes.o3 { grid-template-columns: 1fr 1fr; }
       .pf-grid2 { grid-template-columns: 1fr; }
       nav { padding: 0 20px; }
+      .other-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 600px) {
       .nav-links li:not(:last-child) { display: none; }
@@ -338,6 +354,7 @@
       .pd-nav-card { flex-direction: column; align-items: flex-start; padding: 24px; }
       .pd-nav-card.prev { flex-direction: column; }
       .gallery-thumbs { grid-template-columns: repeat(3,1fr); }
+      .other-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -434,6 +451,16 @@
     </div>
   </section>
 
+  <!-- OTHER PROJECTS -->
+  <section class="other-work" id="other-work" style="display:none">
+    <div class="other-work-inner">
+      <div class="other-work-header">
+        <div><p class="section-label">More work</p><h2 class="work-heading">Other projects</h2></div>
+      </div>
+      <div class="other-grid" id="other-grid"></div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section class="contact" id="contact">
     <div class="contact-inner">
@@ -475,6 +502,7 @@
 <!-- ── ADMIN FAB ── -->
 <div id="admin-fab">
   <div class="fab-row"><span class="fab-lbl blue">Add project</span><button class="fab-btn" onclick="openProjectForm()">+</button></div>
+  <div class="fab-row"><span class="fab-lbl blue">Add other project</span><button class="fab-btn" onclick="openOtherForm()">+</button></div>
   <div class="fab-row"><span class="fab-lbl blue" id="save-fab-lbl">Save changes</span><button class="fab-btn" onclick="saveContent()" style="font-size:18px;">💾</button></div>
   <div class="fab-row"><span class="fab-lbl red">Exit admin</span><button class="fab-btn" style="background:#dc2626;box-shadow:0 4px 20px rgba(220,38,38,.4)" onclick="exitAdmin()">✕</button></div>
 </div>
@@ -596,6 +624,38 @@
   </div>
 </div>
 
+<!-- ── OTHER PROJECT FORM ── -->
+<div id="opf-overlay" style="position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0.55);display:none;overflow-y:auto;backdrop-filter:blur(6px);padding:32px 20px;">
+  <div class="pf-container" style="max-width:560px;">
+    <div class="pf-header">
+      <span class="pf-ttl" id="opf-form-title">New other project</span>
+      <button class="pf-close-btn" onclick="closeOtherForm()">✕</button>
+    </div>
+    <div class="pf-body">
+      <input type="hidden" id="opf-id" />
+      <div class="pf-field">
+        <label class="pf-lbl">Cover image</label>
+        <div class="cover-upload-area" id="opf-cover-area" onclick="document.getElementById('opf-cover-file').click()" style="cursor:pointer;border:2px dashed var(--hairline);border-radius:14px;overflow:hidden;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;background:var(--parchment);max-width:240px;">
+          <img id="opf-cover-img" style="width:100%;height:100%;object-fit:cover;display:none;" />
+          <span id="opf-cover-ph" style="font-size:13px;color:var(--ink-48);">Click to upload image</span>
+        </div>
+        <input type="file" id="opf-cover-file" accept="image/*" style="display:none" onchange="opfHandleCover(this.files[0])" />
+        <p class="pf-hint" style="margin-top:6px;">Recommended: 800×600 px, JPG/PNG, max 5 MB</p>
+      </div>
+      <div class="pf-grid2">
+        <div class="pf-field"><label class="pf-lbl">Title</label><input class="pf-in" id="opf-title" placeholder="Project title" /></div>
+        <div class="pf-field"><label class="pf-lbl">Client</label><input class="pf-in" id="opf-client" placeholder="Client name" /></div>
+      </div>
+      <div class="pf-field" style="max-width:160px;"><label class="pf-lbl">Year</label><input class="pf-in" id="opf-year" placeholder="2024" /></div>
+      <div class="pf-field"><label class="pf-lbl">Brief description</label><textarea class="pf-in" id="opf-desc" rows="3" placeholder="Short description of the project..."></textarea></div>
+    </div>
+    <div class="pf-footer">
+      <button class="pf-cancel-btn" onclick="closeOtherForm()">Cancel</button>
+      <button class="pf-save-btn" onclick="saveOtherForm()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────────────
 const SK = 'marta_portfolio_v2';
@@ -620,6 +680,16 @@ function getSkills() {
   return [...SKILLS];
 }
 function saveSkillsLocal(s) { localStorage.setItem(SK_SKILLS, JSON.stringify(s)); }
+
+const SK_OTHER = 'portfolio_other_v1';
+const OTHER_DEFAULTS = /*OTHER-BEGIN*/[]/*OTHER-END*/;
+const OTHER_VER_KEY = SK_OTHER+'_ver';
+function _otherVer() { return String(Date.now()); }
+function getOtherProjects() {
+  try { const d=localStorage.getItem(SK_OTHER); if(d) return JSON.parse(d); } catch(e) {}
+  return [...OTHER_DEFAULTS];
+}
+function saveOtherProjects(list) { localStorage.setItem(SK_OTHER, JSON.stringify(list)); }
 
 // ── ROUTING ───────────────────────────────────────────────────────────────────
 function showProject(id, push) {
@@ -695,6 +765,33 @@ function renderGrid() {
     el.style.transition=`opacity .5s ease ${i*.08}s, transform .5s ease ${i*.08}s`;
     setTimeout(()=>{el.style.opacity='1';el.style.transform='translateY(0)';},50);
   });
+}
+
+function renderOtherGrid() {
+  const list = getOtherProjects().slice().sort((a,b)=>parseInt(b.year||0)-parseInt(a.year||0));
+  const section = document.getElementById('other-work');
+  const grid = document.getElementById('other-grid');
+  if (!list.length) { section.style.display='none'; return; }
+  section.style.display='';
+  grid.innerHTML = list.map(p => {
+    const coverHTML = p.image
+      ? `<img src="${p.image}" alt="" />`
+      : `<div style="width:100%;height:100%;background:var(--hairline);"></div>`;
+    const meta = [p.year, p.client].filter(Boolean).join(' — ');
+    return `
+    <div class="other-card">
+      <div class="other-card-cover">${coverHTML}</div>
+      <div class="other-card-body">
+        ${meta ? `<p class="other-card-meta">${esc(meta)}</p>` : ''}
+        <p class="other-card-title">${esc(p.title||'')}</p>
+        ${p.description ? `<p class="other-card-desc">${esc(p.description)}</p>` : ''}
+      </div>
+      <div class="card-admin-btns">
+        <button class="adm-btn" onclick="openOtherForm('${esc(p.id)}')">Edit</button>
+        <button class="adm-btn del" onclick="deleteOtherProject('${esc(p.id)}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── RENDER PROJECT DETAIL ─────────────────────────────────────────────────────
@@ -940,6 +1037,18 @@ function replaceDefaultsBlock(htmlStr, projects) {
   );
 }
 
+function replaceOtherDefaultsBlock(htmlStr, list) {
+  const clean = list.map(p => {
+    const c = Object.assign({}, p);
+    if (c.image && c.image.startsWith('data:')) c.image = null;
+    return c;
+  });
+  return htmlStr.replace(
+    /\/\*OTHER-BEGIN\*\/[\s\S]*?\/\*OTHER-END\*\//,
+    `/*OTHER-BEGIN*/${JSON.stringify(clean)}/*OTHER-END*/`
+  );
+}
+
 function replaceSkillsBlock(htmlStr, skills) {
   return htmlStr.replace(
     /\/\*SKILLS-BEGIN\*\/[\s\S]*?\/\*SKILLS-END\*\//,
@@ -1031,9 +1140,25 @@ async function saveContent() {
     }
     saveProjects(projects);
 
-    // 4. Apply text edits, update DEFAULTS and SKILLS
+    // 3b. Upload other project cover images
+    let otherProjects = getOtherProjects();
+    for (const p of otherProjects) {
+      if (p.image && p.image.startsWith('data:')) {
+        const ext = (p.image.match(/data:image\/(\w+)/)||['','jpg'])[1];
+        const path = `images/other-${p.id}.${ext}`;
+        const b64 = p.image.split(',')[1];
+        let sha = null;
+        try { sha = (await ghGetFile(path)).sha; } catch(e) {}
+        await ghPutFile(path, b64, sha, `update other cover ${p.id}`);
+        p.image = `${path}?v=${ts}`;
+      }
+    }
+    saveOtherProjects(otherProjects);
+
+    // 4. Apply text edits, update DEFAULTS, OTHER_DEFAULTS and SKILLS
     html = applyTextChanges(html);
     html = replaceDefaultsBlock(html, projects);
+    html = replaceOtherDefaultsBlock(html, otherProjects);
     html = replaceSkillsBlock(html, getSkills());
 
     // 5. Commit index.html
@@ -1066,6 +1191,68 @@ function deleteProject(id) {
   if (!confirm('Delete this project?')) return;
   saveProjects(getProjects().filter(p=>p.id!==id));
   renderGrid();
+}
+
+// ── OTHER PROJECTS FORM ───────────────────────────────────────────────────────
+let _opfCover = null;
+
+function openOtherForm(id) {
+  _opfCover = null;
+  document.getElementById('opf-cover-img').style.display = 'none';
+  document.getElementById('opf-cover-ph').style.display = '';
+  document.getElementById('opf-id').value = id||'';
+  document.getElementById('opf-form-title').textContent = id ? 'Edit project' : 'New other project';
+  ['opf-title','opf-client','opf-year','opf-desc'].forEach(i=>document.getElementById(i).value='');
+  if (id) {
+    const p = getOtherProjects().find(x=>x.id===id);
+    if (p) {
+      document.getElementById('opf-title').value = p.title||'';
+      document.getElementById('opf-client').value = p.client||'';
+      document.getElementById('opf-year').value = p.year||'';
+      document.getElementById('opf-desc').value = p.description||'';
+      if (p.image) { _opfCover=p.image; document.getElementById('opf-cover-img').src=p.image; document.getElementById('opf-cover-img').style.display='block'; document.getElementById('opf-cover-ph').style.display='none'; }
+    }
+  }
+  document.getElementById('opf-overlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+function closeOtherForm() { document.getElementById('opf-overlay').style.display='none'; document.body.style.overflow=''; }
+
+function opfHandleCover(file) {
+  if (!file) return;
+  const MAX=5*1024*1024;
+  if (file.size>MAX) { alert('Image too large (max 5 MB)'); return; }
+  const r=new FileReader();
+  r.onload=e=>{ _opfCover=e.target.result; document.getElementById('opf-cover-img').src=e.target.result; document.getElementById('opf-cover-img').style.display='block'; document.getElementById('opf-cover-ph').style.display='none'; };
+  r.readAsDataURL(file);
+}
+
+function saveOtherForm() {
+  const title = document.getElementById('opf-title').value.trim();
+  if (!title) { alert('Title is required.'); return; }
+  const editId = document.getElementById('opf-id').value;
+  const list = getOtherProjects();
+  const id = editId || ('other-'+Date.now());
+  const existing = list.find(x=>x.id===id);
+  const entry = {
+    id,
+    title,
+    client: document.getElementById('opf-client').value.trim(),
+    year: document.getElementById('opf-year').value.trim(),
+    description: document.getElementById('opf-desc').value.trim(),
+    image: _opfCover || (existing ? existing.image : null)
+  };
+  if (editId) { const idx=list.findIndex(x=>x.id===editId); if(idx>=0) list[idx]=entry; else list.push(entry); }
+  else list.push(entry);
+  saveOtherProjects(list);
+  closeOtherForm();
+  renderOtherGrid();
+}
+
+function deleteOtherProject(id) {
+  if (!confirm('Delete this project?')) return;
+  saveOtherProjects(getOtherProjects().filter(p=>p.id!==id));
+  renderOtherGrid();
 }
 
 // ── SKILLS ────────────────────────────────────────────────────────────────────
@@ -1240,6 +1427,7 @@ function setTw(k,v){ tw[k]=v; applyTw(); window.parent.postMessage({type:'__edit
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderGrid();
+renderOtherGrid();
 renderSkills();
 loadContent();
 </script>
