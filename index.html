@@ -614,7 +614,7 @@ function getProjects() {
 function saveProjects(p) { localStorage.setItem(SK,JSON.stringify(p)); localStorage.setItem(SK+'_ver',DEFAULTS_VER); }
 
 const SK_SKILLS = 'portfolio_skills_v1';
-const SKILLS = /*SKILLS-BEGIN*/["Service Design","Strategic Design","Business Design","User Research","Prototyping","Workshop Facilitation","Brand Identity","Business Modelling","Figma","Miro","AI-assisted Design","Vibe coding","Claude ecosystem"]/*SKILLS-END*/;
+const SKILLS = /*SKILLS-BEGIN*/["Service Design","Business Design","AI-assisted Design","Vibe coding","Customer Journey","Product Design","Agile Scrum","Change Management","Business Workshop","Market analysis","User Research","Process Mapping","End-to-End Product Design","Figma","Miro","Claude ecosystem","Leadership","PO","PM"]/*SKILLS-END*/;
 function getSkills() {
   try { const d=localStorage.getItem(SK_SKILLS); if(d) return JSON.parse(d); } catch(e) {}
   return [...SKILLS];
